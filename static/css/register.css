@@ -1,0 +1,1035 @@
+
+/* =====================================================
+   ITResolve AI — REGISTER PAGE
+   Responsive • Futuristic • Premium UI
+   ===================================================== */
+
+
+/* =====================================================
+   REGISTER MAIN LAYOUT
+   ===================================================== */
+
+.register-layout {
+    grid-template-columns:
+        minmax(0, 1.15fr)
+        minmax(0, 0.85fr);
+}
+
+
+/* =====================================================
+   LEFT SECTION — HERO
+   ===================================================== */
+
+.register-hero {
+    position: relative;
+    z-index: 3;
+
+    width: 100%;
+    max-width: 570px;
+
+    margin-top: clamp(25px, 5vh, 48px);
+}
+
+.register-hero h1 {
+    font-size: clamp(32px, 3.3vw, 52px);
+    font-weight: 800;
+
+    line-height: 1.12;
+    letter-spacing: -1.8px;
+
+    color: #ffffff;
+
+    overflow-wrap: break-word;
+}
+
+.register-hero h1 span {
+    background: linear-gradient(
+        90deg,
+        #d946ef,
+        #a855f7,
+        #818cf8,
+        #22d3ee
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.register-hero .hero-description {
+    max-width: 440px;
+
+    margin-top: 18px;
+
+    font-size: clamp(13px, 1.1vw, 15px);
+    line-height: 1.8;
+
+    color: #e0e7ff;
+}
+
+
+/* =====================================================
+   REGISTER BENEFITS
+   ===================================================== */
+
+.register-benefits {
+    position: relative;
+    z-index: 4;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 14px;
+
+    margin-top: 28px;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    width: fit-content;
+    max-width: 100%;
+}
+
+.benefit-icon {
+    width: 46px;
+    height: 46px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+
+    color: #50eaff;
+
+    border: 1px solid rgba(100, 100, 255, 0.45);
+    border-radius: 14px;
+
+    background: linear-gradient(
+        145deg,
+        rgba(20, 39, 112, 0.9),
+        rgba(24, 20, 89, 0.85)
+    );
+
+    box-shadow:
+        inset 0 0 15px rgba(99, 102, 241, 0.1),
+        0 0 12px rgba(99, 102, 241, 0.08);
+
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.benefit-item:hover .benefit-icon {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 18px rgba(168, 85, 247, 0.2),
+        inset 0 0 15px rgba(99, 102, 241, 0.12);
+}
+
+.benefit-item h4 {
+    color: #f5f5ff;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    margin-bottom: 5px;
+}
+
+.benefit-item p {
+    color: #b8c5e7;
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   REGISTER ROBOT
+   ===================================================== */
+
+.register-robot {
+    position: absolute;
+
+    width: clamp(300px, 48vw, 680px);
+    max-width: 57%;
+
+    right: 1%;
+    bottom: 4%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 2;
+
+    pointer-events: none;
+}
+
+.register-robot .robot-image {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    object-fit: contain;
+
+    filter:
+        drop-shadow(0 0 16px rgba(0, 217, 255, 0.2))
+        drop-shadow(0 0 25px rgba(168, 85, 247, 0.16));
+
+    animation: robotFloat 5s ease-in-out infinite;
+}
+
+
+/* =====================================================
+   RIGHT SECTION
+   ===================================================== */
+
+.register-layout .right-section {
+    position: relative;
+    z-index: 5;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+    width: 100%;
+}
+
+
+/* =====================================================
+   REGISTER CARD
+   ===================================================== */
+
+.register-card {
+    position: relative;
+
+    width: 100%;
+    max-width: 510px;
+
+    margin: auto;
+
+    padding: clamp(32px, 3vw, 42px) clamp(22px, 2.5vw, 32px) 27px;
+
+    border-radius: 28px;
+
+    background: linear-gradient(
+        140deg,
+        rgba(3, 23, 62, 0.96),
+        rgba(10, 15, 57, 0.96),
+        rgba(38, 10, 68, 0.94)
+    );
+
+    border: 1px solid rgba(129, 140, 248, 0.3);
+
+    box-shadow:
+        0 0 0 1px rgba(99, 102, 241, 0.12),
+        0 0 20px rgba(0, 217, 255, 0.23),
+        0 0 45px rgba(168, 85, 247, 0.18),
+        inset 0 0 30px rgba(14, 165, 233, 0.05);
+
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+
+    animation: cardAppear 0.8s ease both;
+}
+
+
+/* =====================================================
+   REGISTER HEADER
+   ===================================================== */
+
+.register-card .login-heading {
+    text-align: center;
+
+    margin-bottom: 25px;
+}
+
+.register-card .login-heading h1 {
+    font-size: clamp(24px, 2vw, 30px);
+    font-weight: 800;
+
+    letter-spacing: -0.8px;
+
+    color: #f8fafc;
+}
+
+.register-card .login-heading h1 span {
+    display: inline-block;
+
+    animation: waveHand 3s ease-in-out infinite;
+    transform-origin: 70% 70%;
+}
+
+.register-card .login-heading p {
+    margin-top: 8px;
+
+    color: #e0e7ff;
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   DJANGO AUTH MESSAGES
+   ===================================================== */
+
+.auth-message {
+    padding: 11px 14px;
+
+    margin-bottom: 16px;
+
+    border-radius: 10px;
+
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.auth-message.error {
+    background: rgba(255, 70, 100, 0.1);
+
+    border: 1px solid rgba(255, 70, 100, 0.3);
+
+    color: #ff8fa4;
+}
+
+.auth-message.success {
+    background: rgba(30, 220, 160, 0.1);
+
+    border: 1px solid rgba(30, 220, 160, 0.3);
+
+    color: #70f0c7;
+}
+
+
+/* =====================================================
+   REGISTER FORM
+   ===================================================== */
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 17px;
+
+    width: 100%;
+}
+
+
+/* Two fields per row */
+
+.form-row {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+    gap: 14px;
+
+    width: 100%;
+}
+
+
+/* Individual field */
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+
+    width: 100%;
+    min-width: 0;
+}
+
+.input-group label {
+    color: #cbd5f5;
+
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+/* Input container */
+
+.register-form .input-field {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    min-width: 0;
+    height: 47px;
+
+    gap: 10px;
+
+    padding: 0 12px;
+
+    border: 1px solid rgba(129, 140, 248, 0.45);
+    border-radius: 12px;
+
+    background: linear-gradient(
+        100deg,
+        rgba(15, 34, 77, 0.95),
+        rgba(38, 22, 78, 0.88)
+    );
+
+    box-shadow:
+        inset 0 0 15px rgba(99, 102, 241, 0.04),
+        0 0 10px rgba(99, 102, 241, 0.04);
+
+    transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+
+/* Hover effect */
+
+.register-form .input-field:hover {
+    border-color: rgba(192, 132, 252, 0.75);
+}
+
+
+/* Focus effect */
+
+.register-form .input-field:focus-within {
+    border-color: #22d3ee;
+
+    box-shadow:
+        0 0 0 3px rgba(34, 211, 238, 0.08),
+        0 0 18px rgba(34, 211, 238, 0.12);
+}
+
+
+/* Input icons */
+
+.register-form .input-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    color: #a5b4fc;
+    font-size: 16px;
+}
+
+
+/* Input fields */
+
+.register-form input,
+.register-form select {
+    display: block;
+
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent !important;
+
+    color: #f3f6ff !important;
+
+    font-family: inherit;
+    font-size: 12px;
+}
+
+
+/* Placeholder */
+
+.register-form input::placeholder {
+    color: #94a3c7;
+    opacity: 1;
+}
+
+
+/* Select dropdown */
+
+.register-form select {
+    cursor: pointer;
+}
+
+.register-form select option {
+    background: #101a40;
+    color: #ffffff;
+}
+
+
+/* Browser autofill */
+
+.register-form input:-webkit-autofill,
+.register-form input:-webkit-autofill:hover,
+.register-form input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #ffffff !important;
+
+    transition: background-color 9999s ease-in-out 0s;
+
+    -webkit-box-shadow:
+        0 0 0 1000px #101c4b inset !important;
+}
+
+
+/* =====================================================
+   PASSWORD VISIBILITY TOGGLE
+   ===================================================== */
+
+.register-form .toggle-password {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: transparent;
+    border: none;
+}
+
+.register-form .toggle-password svg {
+    width: 20px;
+    height: 20px;
+
+    fill: none;
+    stroke: #dbeafe;
+    stroke-width: 1.8;
+
+    transition: stroke 0.2s;
+}
+
+.register-form .toggle-password:hover svg {
+    stroke: #22d3ee;
+}
+
+
+/* =====================================================
+   PASSWORD STRENGTH INDICATOR (OPTIONAL)
+   ===================================================== */
+
+.password-strength {
+    display: flex;
+    gap: 5px;
+
+    width: 100%;
+
+    margin-top: 5px;
+}
+
+.password-strength span {
+    height: 3px;
+
+    flex: 1;
+
+    border-radius: 10px;
+
+    background: rgba(148, 163, 184, 0.2);
+
+    transition: background 0.3s;
+}
+
+
+/* =====================================================
+   TERMS & CONDITIONS (OPTIONAL)
+   ===================================================== */
+
+.terms-row {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 9px;
+
+    color: #cbd5e1;
+
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.terms-row input {
+    width: 15px;
+    height: 15px;
+
+    flex-shrink: 0;
+
+    margin-top: 2px;
+
+    accent-color: #a855f7;
+
+    cursor: pointer;
+}
+
+.terms-row a {
+    color: #d879f9;
+    font-weight: 600;
+}
+
+.terms-row a:hover {
+    color: #22d3ee;
+}
+
+
+/* =====================================================
+   CREATE ACCOUNT BUTTON
+   ===================================================== */
+
+.register-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 49px;
+
+    gap: 12px;
+
+    margin-top: 5px;
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    background: linear-gradient(
+        100deg,
+        #00d9ff 0%,
+        #386bff 30%,
+        #a020f0 70%,
+        #e040fb 100%
+    );
+
+    box-shadow:
+        0 0 18px rgba(0, 217, 255, 0.25),
+        0 0 30px rgba(168, 85, 247, 0.16);
+
+    transition: transform 0.3s, filter 0.3s, box-shadow 0.3s;
+}
+
+.register-button:hover {
+    transform: translateY(-2px);
+
+    filter: brightness(1.08);
+
+    box-shadow:
+        0 0 25px rgba(0, 217, 255, 0.35),
+        0 0 45px rgba(168, 85, 247, 0.3);
+}
+
+.register-button:active {
+    transform: translateY(0);
+}
+
+.button-arrow {
+    font-size: 20px;
+
+    transition: transform 0.3s;
+}
+
+.register-button:hover .button-arrow {
+    transform: translateX(4px);
+}
+
+
+/* =====================================================
+   LOGIN LINK
+   ===================================================== */
+
+.register-card .register-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-wrap: wrap;
+    gap: 7px;
+
+    margin-top: 22px;
+
+    text-align: center;
+
+    color: #bdc8e8;
+    font-size: 12px;
+}
+
+.register-card .register-text a {
+    color: #e65bff;
+
+    font-weight: 600;
+
+    transition: color 0.2s;
+}
+
+.register-card .register-text a:hover {
+    color: #50eaff;
+}
+
+
+/* =====================================================
+   SECURITY FOOTER
+   ===================================================== */
+
+.register-card .security-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-wrap: wrap;
+    gap: 9px;
+
+    margin-top: 22px;
+
+    text-align: center;
+
+    font-size: 10px;
+    color: #d1d9f0;
+}
+
+.register-card .security-info svg {
+    width: 20px;
+    height: 20px;
+
+    flex-shrink: 0;
+
+    fill: none;
+    stroke: #60a5fa;
+    stroke-width: 1.8;
+}
+
+
+/* =====================================================
+   SHORT LAPTOPS
+   ===================================================== */
+
+/* @media (min-width: 801px) and (max-height: 800px) {
+
+    .register-hero {
+        margin-top: 22px;
+    }
+
+    .register-hero h1 {
+        font-size: clamp(32px, 3vw, 40px);
+    }
+
+    .register-benefits {
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .benefit-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .register-robot {
+        width: 52%;
+        bottom: 5%;
+    }
+
+    .register-card {
+        padding-top: 30px;
+        padding-bottom: 22px;
+    }
+
+    .register-card .login-heading {
+        margin-bottom: 18px;
+    }
+
+    .register-form {
+        gap: 13px;
+    }
+
+    .register-form .input-field {
+        height: 43px;
+    }
+
+    .register-button {
+        min-height: 45px;
+    }
+
+    .register-card .register-text,
+    .register-card .security-info {
+        margin-top: 17px;
+    }
+} */
+
+
+/* =====================================================
+   SMALL LAPTOPS
+   ===================================================== */
+
+@media (min-width: 801px) and (max-width: 1200px) {
+
+    .register-layout {
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(360px, 0.9fr);
+    }
+
+    .register-layout .left-section {
+        padding-left: 4%;
+        padding-right: 4%;
+    }
+
+    .register-hero h1 {
+        font-size: clamp(30px, 3.2vw, 39px);
+    }
+
+    .register-benefits {
+        gap: 11px;
+    }
+
+    .benefit-icon {
+        width: 41px;
+        height: 41px;
+    }
+
+    .register-robot {
+        width: 55%;
+        right: -2%;
+        bottom: 5%;
+    }
+
+    .register-layout .right-section {
+        padding: 20px;
+    }
+
+    .register-card {
+        padding: 30px 23px 22px;
+        border-radius: 24px;
+    }
+
+    .register-form {
+        gap: 14px;
+    }
+
+    .form-row {
+        gap: 10px;
+    }
+}
+
+
+/* =====================================================
+   TABLET
+   ===================================================== */
+
+@media (max-width: 800px) {
+
+    .register-layout {
+        grid-template-columns: 1fr;
+
+        min-height: 100vh;
+        height: auto;
+    }
+
+    /* .register-layout .left-section {
+        display: none;
+    } */
+
+    .register-layout .right-section {
+        width: 100%;
+
+        min-height: 100vh;
+        height: auto;
+
+        padding: 75px 25px 60px;
+    }
+
+    .register-card {
+        width: 100%;
+        max-width: 500px;
+
+        margin: auto;
+
+        padding: 38px 30px 27px;
+    }
+
+    .register-card .login-heading h1 {
+        font-size: clamp(25px, 4vw, 30px);
+    }
+
+    .register-form {
+        gap: 16px;
+    }
+
+    .form-row {
+        gap: 12px;
+    }
+} 
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 600px) {
+
+    .register-layout {
+        display: flex;
+        flex-direction: column;
+
+        min-height: 100vh;
+        height: auto;
+
+        overflow: visible;
+    }
+
+    .register-layout .left-section {
+        display: none;
+    }
+
+    .register-layout .right-section {
+        width: 100%;
+
+        min-height: 100vh;
+        height: auto;
+
+        padding: 65px 18px 30px;
+    }
+
+    .register-card {
+        width: 100%;
+        max-width: 440px;
+
+        padding: 36px 22px 25px;
+
+        border-radius: 22px;
+    }
+
+    .register-card .floating-logo {
+        top: -34px;
+    }
+
+    .register-card .floating-logo .logo-triangle {
+        width: 47px;
+        height: 47px;
+
+        font-size: 27px;
+    }
+
+    .register-card .login-heading {
+        margin-bottom: 22px;
+    }
+
+    .register-card .login-heading h1 {
+        font-size: clamp(24px, 6vw, 28px);
+    }
+
+    .register-card .login-heading p {
+        font-size: 12px;
+    }
+
+    .register-form {
+        gap: 15px;
+    }
+
+    .form-row {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+    }
+
+    .input-group label {
+        font-size: 12px;
+    }
+
+    .register-form .input-field {
+        height: 47px;
+        border-radius: 12px;
+    }
+
+    .register-form input,
+    .register-form select {
+        font-size: 12px;
+    }
+
+    .register-button {
+        min-height: 48px;
+        border-radius: 12px;
+
+        font-size: 13px;
+    }
+
+    .register-card .register-text {
+        font-size: 11px;
+        gap: 6px;
+    }
+
+    .register-card .security-info {
+        font-size: 9px;
+        margin-top: 20px;
+    }
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+   ===================================================== */
+
+@media (max-width: 380px) {
+
+    .register-layout .right-section {
+        padding: 55px 12px 22px;
+    }
+
+    .register-card {
+        padding: 31px 16px 22px;
+        border-radius: 20px;
+    }
+
+    .register-card .login-heading h1 {
+        font-size: 23px;
+    }
+
+    .register-form {
+        gap: 13px;
+    }
+
+    .form-row {
+        gap: 12px;
+    }
+
+    .register-form .input-field {
+        height: 44px;
+        padding: 0 10px;
+        gap: 8px;
+    }
+
+    .register-form input,
+    .register-form select {
+        font-size: 11px;
+    }
+
+    .register-button {
+        min-height: 45px;
+        font-size: 12px;
+    }
+
+    .register-card .register-text {
+        font-size: 10px;
+    }
+
+    .register-card .security-info {
+        font-size: 9px;
+        gap: 6px;
+    }
+}
+
+
+/* =====================================================
+   ACCESSIBILITY — REDUCED MOTION
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .register-robot .robot-image,
+    .register-card,
+    .register-card .login-heading h1 span,
+    .register-button,
+    .benefit-icon {
+        animation: none !important;
+        transition: none !important;
+    }
+}

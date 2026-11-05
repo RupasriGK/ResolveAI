@@ -1,0 +1,338 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | ITResolve AI</title>
+
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+</head>
+
+<body>
+
+<main class="auth-layout">
+
+    <!-- LEFT SIDE -->
+    <section class="left-section">
+
+        <!-- Brand -->
+        <a href="#" class="brand">
+            <div class="brand-logo">
+                <span class="logo-triangle">A</span>
+            </div>
+
+            <div class="brand-details">
+                <h2>ITResolve <span>AI</span></h2>
+                <p>Smart IT Support &amp; Resolution</p>
+            </div>
+        </a>
+
+
+        <!-- Hero text -->
+        <div class="hero-content">
+
+            <div class="hero-badge">
+                <span class="sparkle">✧</span>
+                AI-Powered IT Support
+            </div>
+
+            <h1>
+                Your IT Problems.<br>
+                <span>Our Intelligence.</span>
+            </h1>
+
+            <p class="hero-description">
+                Create tickets, get instant resolutions, and<br class="desktop-only">
+                manage your IT support — all in one place.
+            </p>
+
+        </div>
+
+
+        <!-- Features -->
+        <div class="feature-list">
+
+            <div class="feature-item">
+                <div class="feature-icon icon-cyan">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M13 2 4 14h7l-1 8 10-13h-7z"/>
+                    </svg>
+                </div>
+
+                <div class="feature-text">
+                    <h4>AI Troubleshooting</h4>
+                    <p>Get smart solutions instantly</p>
+                </div>
+            </div>
+
+
+            <div class="feature-item">
+                <div class="feature-icon icon-purple">
+                    <svg viewBox="0 0 24 24">
+                        <path d="m12 2 10 5-10 5L2 7z"/>
+                        <path d="m2 12 10 5 10-5"/>
+                        <path d="m2 17 10 5 10-5"/>
+                    </svg>
+                </div>
+
+                <div class="feature-text">
+                    <h4>Smart Ticketing</h4>
+                    <p>Create, track, and manage tickets</p>
+                </div>
+            </div>
+
+
+            <div class="feature-item">
+                <div class="feature-icon icon-blue">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 4h7a4 4 0 0 1 4 4v12a4 4 0 0 0-4-4H3z"/>
+                        <path d="M21 4h-7a4 4 0 0 0-4 4v12a4 4 0 0 1 4-4h7z"/>
+                    </svg>
+                </div>
+
+                <div class="feature-text">
+                    <h4>Knowledge Hub</h4>
+                    <p>Find answers and helpful guides</p>
+                </div>
+            </div>
+
+
+            <div class="feature-item">
+                <div class="feature-icon icon-violet">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 20h18"/>
+                        <rect x="5" y="12" width="3" height="6" rx="1"/>
+                        <rect x="10.5" y="8" width="3" height="10" rx="1"/>
+                        <rect x="16" y="3" width="3" height="15" rx="1"/>
+                    </svg>
+                </div>
+
+                <div class="feature-text">
+                    <h4>Reports &amp; Analytics</h4>
+                    <p>Monitor support and performance</p>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Robot illustration -->
+        <div class="robot-scene">
+
+            <div class="robot-glow"></div>
+
+            <img
+                src="{% static 'images/ai_robot.png' %}"
+                alt="ITResolve AI assistant robot"
+                class="robot-image"
+            >
+
+        </div>
+
+
+        <!-- Bottom decoration -->
+        <div class="bottom-wave"></div>
+
+    </section>
+
+
+    <!-- RIGHT SIDE LOGIN -->
+    <section class="right-section">
+
+        <div class="login-card">
+
+            <!-- Floating logo -->
+            <div class="floating-logo">
+                <div class="logo-triangle">A</div>
+            </div>
+
+
+            <!-- Heading -->
+            <div class="login-heading">
+                <h1>Welcome Back <span>👋</span></h1>
+                <p>Sign in to ITResolve AI</p>
+            </div>
+
+
+            <!-- Django messages -->
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message {{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+
+            <!-- Form -->
+            <form method="POST" class="login-form">
+
+                {% csrf_token %}
+
+                <!-- Username -->
+                <div class="input-field">
+
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
+                    </svg>
+
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Enter your username"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Password -->
+                <div class="input-field">
+
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="11" width="18" height="10" rx="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10v4"/>
+                    </svg>
+
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button type="button" class="toggle-password"
+                            id="togglePassword" aria-label="Show password">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+
+                    </button>
+
+                </div>
+
+
+                <!-- Options -->
+                <div class="form-options">
+
+                    <label class="remember-me">
+                        <input type="checkbox" name="remember_me">
+                        <span class="custom-checkbox"></span>
+                        Remember me
+                    </label>
+
+                    <a href="{% url 'forgot_password' %}" class="forgot-password">
+                        Forgot password?
+                    </a>
+
+                </div>
+
+
+                <!-- Sign in -->
+                <button type="submit" class="sign-in-button">
+
+                    <span>Sign In</span>
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M5 12h14"/>
+                        <path d="m13 5 7 7-7 7"/>
+                    </svg>
+
+                </button>
+
+            </form>
+
+
+            <!-- Divider -->
+            <div class="divider">
+                <span></span>
+                <p>OR</p>
+                <span></span>
+            </div>
+
+
+            <!-- Google button -->
+            <button type="button" class="google-button">
+
+                <span class="google-g">G</span>
+                <span>Continue with Google</span>
+
+            </button>
+
+
+            <!-- Register -->
+            <div class="register-text">
+
+                <span>New to ITResolve AI?</span>
+
+                <a href="{% url 'register' %}">
+                    Create an account <span>↗</span>
+                </a>
+
+            </div>
+
+
+            <!-- Security footer -->
+            <div class="security-info">
+
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>
+                    <path d="m9 12 2 2 4-4"/>
+                </svg>
+
+                <span>Secure authentication · Protected workspace</span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+    const password = document.getElementById("password");
+    const toggle = document.getElementById("togglePassword");
+
+    toggle.addEventListener("click", function () {
+
+        const visible = password.type === "password";
+
+        password.type = visible ? "text" : "password";
+
+        this.setAttribute(
+            "aria-label",
+            visible ? "Hide password" : "Show password"
+        );
+
+        this.innerHTML = visible
+            ? `<svg viewBox="0 0 24 24">
+                <path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8"/>
+                <path d="M9.9 5.2A10 10 0 0 1 12 5c6.5 0 10 7 10 7a12 12 0 0 1-3 4"/>
+                <path d="M6.2 6.2C3.5 8.1 2 12 2 12s3.5 7 10 7c1.4 0 2.7-.4 3.8-1"/>
+               </svg>`
+            : `<svg viewBox="0 0 24 24">
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/>
+                <circle cx="12" cy="12" r="3"/>
+               </svg>`;
+    });
+</script>
+
+</body>
+</html>

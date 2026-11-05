@@ -1,0 +1,233 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | ITResolve AI</title>
+
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+</head>
+
+<body>
+
+<div class="auth-layout register-layout">
+
+    <!-- LEFT VISUAL SECTION -->
+    <section class="left-section">
+
+        <div class="brand">
+            <div class="brand-logo">A</div>
+
+            <div class="brand-text">
+                <h2>ITResolve <span>AI</span></h2>
+                <p>Smart IT Support & Resolution</p>
+            </div>
+        </div>
+
+        <div class="hero-content register-hero">
+
+            <div class="hero-badge">
+                ✦ &nbsp; AI-Powered IT Support
+            </div>
+
+            <h1>
+                Join the Future<br>
+                <span>of IT Support.</span>
+            </h1>
+
+            <p class="hero-description">
+                Create your account and experience intelligent IT
+                support, instant troubleshooting, and smarter
+                ticket management.
+            </p>
+
+            <div class="register-benefits">
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">✦</div>
+                    <div>
+                        <h4>AI-Powered Assistance</h4>
+                        <p>Get intelligent solutions to IT problems.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">⌘</div>
+                    <div>
+                        <h4>Seamless Ticket Tracking</h4>
+                        <p>Manage and monitor your support requests.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">◈</div>
+                    <div>
+                        <h4>Secure Workspace</h4>
+                        <p>Your information stays protected.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Robot illustration -->
+        <div class="robot-scene register-robot">
+            <img
+                src="{% static 'images/ai_robot.png' %}"
+                alt="ITResolve AI Robot"
+                class="robot-image"
+            >
+        </div>
+
+    </section>
+
+
+    <!-- RIGHT REGISTER SECTION -->
+    <section class="right-section">
+
+        <div class="login-card register-card">
+
+            <div class="floating-logo">
+                <div class="logo-triangle">A</div>
+            </div>
+
+            <div class="login-heading">
+                <h1>Create Account <span>✨</span></h1>
+                <p>Join ITResolve AI today</p>
+            </div>
+
+            <!-- Django messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="auth-message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" class="login-form register-form">
+                {% csrf_token %}
+
+                <div class="form-row">
+
+                    <div class="input-group">
+                        <label for="username">Username</label>
+
+                        <div class="input-field">
+                            <span class="input-icon">♙</span>
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                placeholder="Choose a username"
+                                required
+                                autocomplete="username"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">Email Address</label>
+
+                        <div class="input-field">
+                            <span class="input-icon">✉</span>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="Enter your email"
+                                required
+                                autocomplete="email"
+                            >
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="input-group">
+                    <label for="department">Department</label>
+
+                    <div class="input-field">
+                        <span class="input-icon">▤</span>
+
+                        <select id="department" name="department" required>
+                            <option value="" disabled selected>
+                                Select your department
+                            </option>
+                            <option value="IT">Information Technology</option>
+                            <option value="HR">Human Resources</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Sales">Sales</option>
+                            <option value="Operations">Operations</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+
+                    <div class="input-group">
+                        <label for="password">Password</label>
+
+                        <div class="input-field">
+                            <span class="input-icon">♙</span>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Create password"
+                                required
+                                autocomplete="new-password"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="confirm_password">Confirm Password</label>
+
+                        <div class="input-field">
+                            <span class="input-icon">♙</span>
+                            <input
+                                type="password"
+                                id="confirm_password"
+                                name="confirm_password"
+                                placeholder="Confirm password"
+                                required
+                                autocomplete="new-password"
+                            >
+                        </div>
+                    </div>
+
+                </div>
+
+                <button type="submit" class="sign-in-button register-button">
+                    <span>Create Account</span>
+                    <span class="button-arrow">→</span>
+                </button>
+
+            </form>
+
+            <div class="register-text">
+                Already have an account?
+                <a href="{% url 'login' %}">Sign in ↗</a>
+            </div>
+
+            <div class="security-info">
+                <span class="security-icon">♢</span>
+                Secure registration · Protected workspace
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+</html>
