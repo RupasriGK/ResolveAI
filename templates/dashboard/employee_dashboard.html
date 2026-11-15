@@ -1,0 +1,259 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ITResolve AI | Employee Dashboard</title>
+
+    <link rel="stylesheet" href="{% static 'css/employee-dashboard.css' %}">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <!-- Logo -->
+            <div class="sidebar-logo">
+                <div class="logo-icon">IT</div>
+
+                <div class="logo-text">
+                    <h2>ITResolve</h2>
+                    <span>AI SUPPORT</span>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="sidebar-navigation">
+
+                <p class="menu-heading">MAIN MENU</p>
+
+                <a href="{% url 'dashboard:employee_dashboard' request.user.id %}"
+                   class="nav-link active">
+                    <span class="nav-icon">▦</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="{% url 'tickets:create_ticket' %}" class="nav-link">
+                    <span class="nav-icon">＋</span>
+                    <span>Create Ticket</span>
+                </a>
+
+                <a href="{% url 'tickets:my_tickets' %}" class="nav-link">
+                    <span class="nav-icon">▤</span>
+                    <span>My Tickets</span>
+                </a>
+
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">✧</span>
+                    <span>AI Assistant</span>
+                </a>
+
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">▣</span>
+                    <span>Knowledge Base</span>
+                </a>
+
+                <p class="menu-heading support-heading">ACCOUNT</p>
+
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">◉</span>
+                    <span>My Profile</span>
+                </a>
+
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">⚙</span>
+                    <span>Settings</span>
+                </a>
+
+            </nav>
+
+            <!-- Sidebar Bottom -->
+            <div class="sidebar-bottom">
+
+                <div class="help-card">
+                    <div class="help-icon">✦</div>
+                    <h4>Need Help?</h4>
+                    <p>Our IT support team is ready to help you.</p>
+                    <a href="#">Get Support →</a>
+                </div>
+
+                <a href="#" class="logout-link">
+                    <span class="nav-icon">↪</span>
+                    <span>Logout</span>
+                </a>
+
+            </div>
+
+        </aside>
+
+        <!-- Main Dashboard Area -->
+        
+        <main class="main-content">
+
+            <!-- Dashboard Header -->
+            <header class="dashboard-header">
+
+                <!-- Page Title -->
+                <div class="header-title">
+                    <h1>Dashboard</h1>
+                    <p>Welcome back! Here's your IT support overview.</p>
+                </div>
+
+                <!-- Header Actions -->
+                <div class="header-actions">
+
+                    <!-- Search -->
+                    <div class="header-search">
+                        <span class="search-icon">⌕</span>
+                        <input
+                            type="text"
+                            placeholder="Search tickets, knowledge..."
+                        >
+                        <span class="search-shortcut">⌘ K</span>
+                    </div>
+
+                    <!-- Notifications -->
+                    <button class="notification-btn" type="button"
+                            aria-label="Notifications">
+                        ♧
+                        <span class="notification-dot"></span>
+                    </button>
+
+                    <!-- Employee Profile -->
+                    <div class="header-profile">
+
+                        <div class="profile-avatar">
+                            {{ request.user.username|first|upper }}
+                        </div>
+
+                        <div class="profile-details">
+                            <h4>{{ request.user.username }}</h4>
+                            <span>Employee</span>
+                        </div>
+
+                        <span class="profile-arrow">⌄</span>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+            <!-- Dashboard content will be added in upcoming parts -->
+
+            
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+
+                <div class="welcome-content">
+                    <span class="welcome-label">EMPLOYEE WORKSPACE</span>
+
+                    <h2>
+                        Welcome back, {{ request.user.first_name|default:request.user.username }}!
+                        <span class="welcome-emoji">👋</span>
+                    </h2>
+
+                    <p>
+                        Manage your IT support requests and get the help you need.
+                        We're here to keep your work running smoothly.
+                    </p>
+                </div>
+
+                <a href="#" class="create-ticket-btn">
+                    <span>＋</span>
+                    Create New Ticket
+                </a>
+
+            </section>
+
+
+            <!-- Ticket Statistics -->
+            <section class="stats-section">
+
+                <div class="section-heading">
+                    <div>
+                        <h2>Ticket Overview</h2>
+                        <p>Track your IT support requests</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+
+                    <!-- Total Tickets -->
+                    <div class="stat-card total-card">
+
+                        <div class="stat-top">
+                            <div class="stat-icon">▤</div>
+                            <span class="stat-label">TOTAL TICKETS</span>
+                        </div>
+
+                        <h3>{{ total_tickets|default:0 }}</h3>
+
+                        <p>All your submitted tickets</p>
+
+                    </div>
+
+
+                    <!-- Open Tickets -->
+                    <div class="stat-card open-card">
+
+                        <div class="stat-top">
+                            <div class="stat-icon">◷</div>
+                            <span class="stat-label">OPEN TICKETS</span>
+                        </div>
+
+                        <h3>{{ open_tickets|default:0 }}</h3>
+
+                        <p>Waiting for support</p>
+
+                    </div>
+
+
+                    <!-- In Progress -->
+                    <div class="stat-card progress-card">
+
+                        <div class="stat-top">
+                            <div class="stat-icon">↻</div>
+                            <span class="stat-label">IN PROGRESS</span>
+                        </div>
+
+                        <h3>{{ in_progress_tickets|default:0 }}</h3>
+
+                        <p>Currently being handled</p>
+
+                    </div>
+
+
+                    <!-- Resolved -->
+                    <div class="stat-card resolved-card">
+
+                        <div class="stat-top">
+                            <div class="stat-icon">✓</div>
+                            <span class="stat-label">RESOLVED</span>
+                        </div>
+
+                        <h3>{{ resolved_tickets|default:0 }}</h3>
+
+                        <p>Successfully completed</p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+</body>
+</html>

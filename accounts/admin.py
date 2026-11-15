@@ -1,5 +1,7 @@
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+
 from .models import User
 
 
@@ -12,7 +14,10 @@ class CustomUserAdmin(UserAdmin):
         }),
     )
 
+    readonly_fields = ("id",)
+
     list_display = (
+        "id",
         "username",
         "email",
         "role",
@@ -24,4 +29,10 @@ class CustomUserAdmin(UserAdmin):
         "role",
         "department",
         "is_active",
+    )
+
+    search_fields = (
+        "id",
+        "username",
+        "email",
     )

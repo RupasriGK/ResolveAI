@@ -126,9 +126,14 @@
                                 name="username"
                                 placeholder="Choose a username"
                                 required
+                                minlength="3"
+                                maxlength="150"
+                                pattern="[A-Za-z0-9_.@+-]+"
                                 autocomplete="username"
+                                value="{{ form_data.username }}"
                             >
                         </div>
+                        <div class="field-hint" id="username-error"></div>
                     </div>
 
                     <div class="input-group">
@@ -143,8 +148,10 @@
                                 placeholder="Enter your email"
                                 required
                                 autocomplete="email"
+                                value="{{ form_data.email }}"
                             >
                         </div>
+                        <div class="field-hint" id="email-error"></div>
                     </div>
 
                 </div>
@@ -159,16 +166,17 @@
                             <option value="" disabled selected>
                                 Select your department
                             </option>
-                            <option value="IT">Information Technology</option>
-                            <option value="HR">Human Resources</option>
-                            <option value="Finance">Finance</option>
-                            <option value="Marketing">Marketing</option>
-                            <option value="Sales">Sales</option>
-                            <option value="Operations">Operations</option>
-                            <option value="Other">Other</option>
+                            <option value="IT" {% if form_data.department == "IT" %}selected{% endif %}>Information Technology</option>
+                            <option value="HR" {% if form_data.department == "HR" %}selected{% endif %}>Human Resources</option>
+                            <option value="Finance" {% if form_data.department == "Finance" %}selected{% endif %}>Finance</option>
+                            <option value="Marketing" {% if form_data.department == "Marketing" %}selected{% endif %}>Marketing</option>
+                            <option value="Sales" {% if form_data.department == "Sales" %}selected{% endif %}>Sales</option>
+                            <option value="Operations" {% if form_data.department == "Operations" %}selected{% endif %}>Operations</option>
+                            <option value="Other" {% if form_data.department == "Other" %}selected{% endif %}>Other</option>
                         </select>
                     </div>
                 </div>
+                <div class="field-hint" id="department-error"></div>
 
                 <div class="form-row">
 
@@ -183,9 +191,14 @@
                                 name="password"
                                 placeholder="Create password"
                                 required
+                                minlength="8"
                                 autocomplete="new-password"
                             >
                         </div>
+                        <div class="password-strength" id="register-strength" aria-live="polite" hidden>
+                            <span></span><span></span><span></span><span></span>
+                        </div>
+                        <div class="strength-text" id="register-strength-text" hidden></div>
                     </div>
 
                     <div class="input-group">
@@ -202,6 +215,7 @@
                                 autocomplete="new-password"
                             >
                         </div>
+                        <div class="field-hint" id="register-confirm-text"></div>
                     </div>
 
                 </div>
@@ -228,6 +242,112 @@
     </section>
 
 </div>
+
+<script>
+const registerPassword = document.getElementById("password");
+const registerConfirm = document.getElementById("confirm_password");
+const registerBars = document.querySelectorAll("#register-strength span");
+const registerUsername = document.getElementById("username");
+const registerEmail = document.getElementById("email");
+const registerDepartment = document.getElementById("department");
+
+function registerChecks(value) {
+    return {
+        length: value.length >= 8,
+        case: /[a-z]/.test(value) && /[A-Z]/.test(value),
+        number: /\d/.test(value),
+        special: /[^A-Za-z0-9\s]/.test(value)
+    };
+}
+
+function updateRegisterPassword() {
+    const checks = registerChecks(registerPassword.value);
+    const passed = Object.values(checks).filter(Boolean).length;
+    const labels = ["", "Weak", "Fair", "Good", "Strong"];
+    const levelNames = ["", "weak", "fair", "good", "strong"];
+    const strength = document.getElementById("register-strength");
+    const strengthText = document.getElementById("register-strength-text");
+    const isEntering = registerPassword.value.length > 0;
+    strength.hidden = !isEntering;
+    strengthText.hidden = !isEntering;
+    strength.dataset.level = isEntering ? levelNames[passed] : "";
+    strengthText.textContent = isEntering ? labels[passed] + " password" : "";
+    strengthText.className = "strength-text " + (passed ? ["weak-text", "fair-text", "good-text", "strong-text"][passed - 1] : "");
+    registerBars.forEach((bar, index) => {
+        bar.className = index < passed ? ["weak", "fair", "good", "strong"][passed - 1] : "";
+    });
+    const passwordValid = passed === 4;
+    registerPassword.setCustomValidity(passwordValid ? "" : "Password does not meet all strength requirements.");
+    registerConfirm.disabled = !passwordValid;
+    updateRegisterConfirmation();
+}
+
+function updateRegisterConfirmation() {
+    const text = document.getElementById("register-confirm-text");
+    if (!registerConfirm.value) {
+        text.textContent = "";
+        registerConfirm.setCustomValidity("");
+    } else if (registerPassword.value !== registerConfirm.value) {
+        text.textContent = "Passwords do not match.";
+        registerConfirm.setCustomValidity("Passwords do not match.");
+    } else {
+        text.textContent = "Passwords match.";
+        registerConfirm.setCustomValidity("");
+    }
+}
+
+registerPassword.addEventListener("input", updateRegisterPassword);
+registerPassword.addEventListener("change", updateRegisterPassword);
+registerConfirm.addEventListener("input", updateRegisterConfirmation);
+
+function showFieldError(input, hint, message) {
+    hint.textContent = message;
+    hint.className = message ? "field-hint field-error" : "field-hint";
+    input.classList.toggle("invalid", Boolean(message));
+    input.setCustomValidity(message);
+}
+
+registerUsername.addEventListener("input", function () {
+    const username = this.value.trim();
+    const valid = username.length >= 3 && /^[A-Za-z0-9_.@+-]+$/.test(username);
+    showFieldError(this, document.getElementById("username-error"),
+        this.value && !valid ? "Use at least 3 letters, numbers, dots, or underscores." : "");
+    registerEmail.disabled = !valid;
+});
+
+registerEmail.addEventListener("input", function () {
+    const valid = this.value.length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value.trim());
+    showFieldError(this, document.getElementById("email-error"),
+        this.value && !valid ? "Enter a complete, valid email address." : "");
+    registerDepartment.disabled = !valid;
+});
+
+registerDepartment.addEventListener("change", function () {
+    const valid = Boolean(this.value);
+    showFieldError(this, document.getElementById("department-error"),
+        valid ? "" : "Select your department.");
+    registerPassword.disabled = !valid;
+});
+
+registerUsername.addEventListener("blur", function () {
+    if (this.value && !this.checkValidity()) this.reportValidity();
+});
+registerEmail.addEventListener("blur", function () {
+    if (this.value && !this.checkValidity()) this.reportValidity();
+});
+
+registerEmail.disabled = true;
+registerDepartment.disabled = true;
+registerPassword.disabled = true;
+registerConfirm.disabled = true;
+
+if (registerUsername.value) registerUsername.dispatchEvent(new Event("input"));
+if (registerEmail.value && !registerEmail.disabled) registerEmail.dispatchEvent(new Event("input"));
+if (registerDepartment.value) {
+    registerDepartment.dispatchEvent(new Event("change"));
+    registerPassword.dispatchEvent(new Event("input"));
+}
+</script>
 
 </body>
 </html>

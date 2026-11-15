@@ -519,6 +519,11 @@
     margin-top: 5px;
 }
 
+.password-strength[hidden],
+.strength-text[hidden] {
+    display: none;
+}
+
 .password-strength span {
     height: 3px;
 
@@ -530,6 +535,38 @@
 
     transition: background 0.3s;
 }
+
+.password-strength span.weak { background: #ef4444; }
+.password-strength span.fair { background: #f59e0b; }
+.password-strength span.good { background: #38bdf8; }
+.password-strength span.strong { background: #22c55e; }
+
+.password-strength[data-level="weak"] span:nth-child(-n+1) { background: #ef4444; }
+.password-strength[data-level="fair"] span:nth-child(-n+2) { background: #f59e0b; }
+.password-strength[data-level="good"] span:nth-child(-n+3) { background: #38bdf8; }
+.password-strength[data-level="strong"] span { background: #22c55e; }
+
+.strength-text, .field-hint {
+    min-height: 18px;
+    margin-top: 6px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.field-hint.field-error {
+    color: #f87171;
+}
+
+input.invalid,
+select.invalid {
+    border-color: #ef4444 !important;
+}
+
+.strength-text.weak-text { color: #ef4444; }
+.strength-text.fair-text { color: #f59e0b; }
+.strength-text.good-text { color: #38bdf8; }
+.strength-text.strong-text { color: #22c55e; }
+
 
 
 /* =====================================================

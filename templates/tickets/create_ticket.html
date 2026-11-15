@@ -1,0 +1,229 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Ticket | ITResolve AI</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/employee-dashboard.css' %}">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-icon">IT</div>
+
+            <div class="logo-text">
+                <h2>ITResolve</h2>
+                <span>AI SUPPORT</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-navigation">
+
+            <p class="menu-heading">MAIN MENU</p>
+
+            <a href="{% url 'dashboard:employee_dashboard' request.user.id %}"
+               class="nav-link">
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{% url 'tickets:create_ticket' %}"
+               class="nav-link active">
+                <span class="nav-icon">＋</span>
+                <span>Create Ticket</span>
+            </a>
+
+            <a href="{% url 'tickets:my_tickets' %}" class="nav-link">
+                <span class="nav-icon">▤</span>
+                <span>My Tickets</span>
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">✧</span>
+                <span>AI Assistant</span>
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">▣</span>
+                <span>Knowledge Base</span>
+            </a>
+
+            <p class="menu-heading support-heading">ACCOUNT</p>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">◉</span>
+                <span>My Profile</span>
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">⚙</span>
+                <span>Settings</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="help-card">
+                <div class="help-icon">✦</div>
+                <h4>Need Help?</h4>
+                <p>Our IT support team is ready to help you.</p>
+                <a href="#">Get Support →</a>
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <header class="dashboard-header">
+
+            <div class="header-title">
+                <h1>Create New Ticket</h1>
+                <p>Submit your IT issue to our support team.</p>
+            </div>
+
+            <div class="header-actions">
+
+                <div class="header-profile">
+
+                    <div class="profile-avatar">
+                        {{ request.user.username|first|upper }}
+                    </div>
+
+                    <div class="profile-details">
+                        <h4>{{ request.user.username }}</h4>
+                        <span>Employee</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Ticket Form -->
+        <section class="ticket-form-section">
+
+            <div class="ticket-form-heading">
+                <div>
+                    <span class="welcome-label">IT SUPPORT REQUEST</span>
+                    <h2>Tell us about your issue</h2>
+                    <p>Provide accurate information to help us resolve your issue faster.</p>
+                </div>
+            </div>
+
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="success-message">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+
+            <form method="POST" class="ticket-form">
+
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="{{ form.title.id_for_label }}">
+                        Issue Title <span>*</span>
+                    </label>
+
+                    {{ form.title }}
+
+                    {% for error in form.title.errors %}
+                        <small class="field-error">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+
+                <div class="form-group">
+                    <label for="{{ form.description.id_for_label }}">
+                        Issue Description <span>*</span>
+                    </label>
+
+                    {{ form.description }}
+
+                    {% for error in form.description.errors %}
+                        <small class="field-error">{{ error }}</small>
+                    {% endfor %}
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="{{ form.category.id_for_label }}">
+                            Category <span>*</span>
+                        </label>
+
+                        {{ form.category }}
+
+                        {% for error in form.category.errors %}
+                            <small class="field-error">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="{{ form.priority.id_for_label }}">
+                            Priority <span>*</span>
+                        </label>
+
+                        {{ form.priority }}
+
+                        {% for error in form.priority.errors %}
+                            <small class="field-error">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+
+                {% if form.non_field_errors %}
+                    <div class="field-error">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+
+                <div class="form-actions">
+
+                    <a href="{% url 'dashboard:employee_dashboard' request.user.id %}"
+                       class="cancel-btn">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="submit-ticket-btn">
+                        Submit Ticket →
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

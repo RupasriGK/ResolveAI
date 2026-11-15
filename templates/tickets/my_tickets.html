@@ -1,0 +1,291 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Tickets | ITResolve AI</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/employee-dashboard.css' %}">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-icon">IT</div>
+            <div class="logo-text">
+                <h2>ITResolve</h2>
+                <span>AI SUPPORT</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-navigation">
+
+            <p class="menu-heading">MAIN MENU</p>
+
+            <a href="{% url 'dashboard:employee_dashboard' request.user.id %}"
+               class="nav-link">
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{% url 'tickets:create_ticket' %}"
+               class="nav-link">
+                <span class="nav-icon">＋</span>
+                <span>Create Ticket</span>
+            </a>
+
+            <a href="{% url 'tickets:my_tickets' %}"
+               class="nav-link active">
+                <span class="nav-icon">▤</span>
+                <span>My Tickets</span>
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">✧</span>
+                <span>AI Assistant</span>
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">▣</span>
+                <span>Knowledge Base</span>
+            </a>
+
+            <p class="menu-heading support-heading">ACCOUNT</p>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">◉</span>
+                <span>My Profile</span>
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">⚙</span>
+                <span>Settings</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="help-card">
+                <div class="help-icon">✦</div>
+                <h4>Need Help?</h4>
+                <p>Our IT support team is ready to help you.</p>
+                <a href="#">Get Support →</a>
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Header -->
+        <header class="dashboard-header">
+
+            <div class="header-title">
+                <h1>My Tickets</h1>
+                <p>View and track your IT support requests.</p>
+            </div>
+
+            <div class="header-actions">
+
+                <div class="header-profile">
+                    <div class="profile-avatar">
+                        {{ request.user.username|first|upper }}
+                    </div>
+
+                    <div class="profile-details">
+                        <h4>{{ request.user.username }}</h4>
+                        <span>Employee</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Page Heading -->
+        <section class="tickets-page-heading">
+
+            <div>
+                <span class="welcome-label">SUPPORT MANAGEMENT</span>
+                <h2>Your Support Requests</h2>
+                <p>Monitor the progress of your submitted IT issues.</p>
+            </div>
+
+            <a href="{% url 'tickets:create_ticket' %}"
+               class="create-ticket-btn">
+                <span>＋</span>
+                Create New Ticket
+            </a>
+
+        </section>
+
+
+        <!-- Search and Filter -->
+        <section class="tickets-toolbar">
+
+            <form method="GET" class="tickets-filter-form">
+
+                <div class="tickets-search">
+                    <span>⌕</span>
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search_query }}"
+                        placeholder="Search by title or category..."
+                    >
+                </div>
+
+                <select name="status" class="status-filter">
+                    <option value="">All Statuses</option>
+
+                    <option value="OPEN"
+                        {% if selected_status == "OPEN" %}selected{% endif %}>
+                        Open
+                    </option>
+
+                    <option value="IN_PROGRESS"
+                        {% if selected_status == "IN_PROGRESS" %}selected{% endif %}>
+                        In Progress
+                    </option>
+
+                    <option value="RESOLVED"
+                        {% if selected_status == "RESOLVED" %}selected{% endif %}>
+                        Resolved
+                    </option>
+                </select>
+
+                <button type="submit" class="filter-btn">
+                    Apply
+                </button>
+
+                <a href="{% url 'tickets:my_tickets' %}"
+                   class="reset-filter-btn">
+                    Reset
+                </a>
+
+            </form>
+
+        </section>
+
+
+        <!-- Tickets Table -->
+        <section class="tickets-table-section">
+
+            <div class="tickets-table-heading">
+                <div>
+                    <h3>All My Tickets</h3>
+                    <p>Your submitted support requests</p>
+                </div>
+
+                <span class="ticket-count">
+                    {{ tickets|length }} ticket(s)
+                </span>
+            </div>
+
+
+            <div class="tickets-table-wrapper">
+
+                <table class="tickets-table">
+
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Issue</th>
+                            <th>Category</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Created Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for ticket in tickets %}
+
+                        <tr>
+
+                            <td class="ticket-id">
+                                #{{ ticket.id|truncatechars:13 }}
+                            </td>
+
+                            <td>
+                                <div class="ticket-title-cell">
+                                    <strong>{{ ticket.title }}</strong>
+                                    <span>Support request</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                {{ ticket.category }}
+                            </td>
+
+                            <td>
+                                <span class="priority-badge priority-{{ ticket.priority|lower }}">
+                                    {{ ticket.get_priority_display }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="status-badge status-{{ ticket.status|lower }}">
+                                    {{ ticket.get_status_display }}
+                                </span>
+                            </td>
+
+                            <td class="ticket-date">
+                                {{ ticket.created_at|date:"d M Y" }}
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-tickets">
+                                    <div class="empty-ticket-icon">▤</div>
+
+                                    <h3>No tickets found</h3>
+
+                                    <p>
+                                        You haven't submitted any tickets matching
+                                        your search or filter.
+                                    </p>
+
+                                    <a href="{% url 'tickets:create_ticket' %}"
+                                       class="create-ticket-btn">
+                                        ＋ Create Your First Ticket
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
