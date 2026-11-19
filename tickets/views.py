@@ -3,13 +3,20 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
+from django.http import Http404
 
 from .models import Ticket
 from .forms import TicketCreateForm
 
+from django.shortcuts import get_object_or_404
+
 
 @login_required
-def create_ticket(request):
+def create_ticket(request, user_uuid):
+
+    # Validate employee UUID
+    if request.user.id != user_uuid:
+        raise Http404("Page not found")
 
     if request.method == "POST":
         form = TicketCreateForm(request.POST)
@@ -24,7 +31,10 @@ def create_ticket(request):
                 "Your support ticket has been created successfully!"
             )
 
-            return redirect("dashboard:employee_dashboard",user_uuid=request.user.id)
+            return redirect(
+                "dashboard:employee_dashboard",
+                user_uuid=request.user.id
+            )
 
     else:
         form = TicketCreateForm()
@@ -37,7 +47,11 @@ def create_ticket(request):
 
 
 @login_required
-def my_tickets(request):
+def my_tickets(request, user_uuid):
+
+    # Validate employee UUID
+    if request.user.id != user_uuid:
+        raise Http404("Page not found")
 
     # Fetch only tickets created by the logged-in employee
     tickets = Ticket.objects.filter(
@@ -74,5 +88,29 @@ def my_tickets(request):
     return render(
         request,
         "tickets/my_tickets.html",
+        context
+    )
+
+@login_required
+def ticket_detail(request, user_uuid, ticket_uuid):
+
+    # Verify that the logged-in employee owns this URL
+    if request.user.id != user_uuid:
+        raise Http404("Page not found")
+
+    # Retrieve only this employee's ticket
+    ticket = get_object_or_404(
+        Ticket,
+        uuid=ticket_uuid,
+        created_by=request.user
+    )
+
+    context = {
+        "ticket": ticket,
+    }
+
+    return render(
+        request,
+        "tickets/ticket_detail.html",
         context
     )

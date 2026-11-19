@@ -1,0 +1,353 @@
+
+/* =========================================
+   ITRESOLVE AI - TICKET DETAILS PAGE
+========================================= */
+
+.ticket-details-page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 0 50px;
+}
+
+/* Page Heading */
+
+.ticket-details-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.ticket-details-heading h2 {
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 12px 0;
+    overflow-wrap: anywhere;
+}
+
+.ticket-details-heading p {
+    color: #9ca9bd;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.ticket-reference {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 13px;
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    background: rgba(139, 92, 246, 0.10);
+    color: #b9a0ff;
+    border-radius: 8px;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+/* Ticket Overview */
+
+.ticket-details-info {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.ticket-info-card {
+    background: #151d30;
+    border: 1px solid #27334a;
+    border-radius: 13px;
+    padding: 20px;
+    min-width: 0;
+    transition: 0.25s ease;
+}
+
+.ticket-info-card:hover {
+    border-color: #7654d9;
+    transform: translateY(-3px);
+}
+
+.ticket-info-card label {
+    display: block;
+    color: #8795ad;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 13px;
+}
+
+.ticket-info-card p {
+    color: #edf1fa;
+    font-size: 14px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+/* Status Badges */
+
+.status-badge,
+.priority-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.status-open {
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.12);
+}
+
+.status-in_progress {
+    color: #60a5fa;
+    background: rgba(96, 165, 250, 0.12);
+}
+
+.status-resolved {
+    color: #34d399;
+    background: rgba(52, 211, 153, 0.12);
+}
+
+.priority-low {
+    color: #34d399;
+    background: rgba(52, 211, 153, 0.12);
+}
+
+.priority-medium {
+    color: #60a5fa;
+    background: rgba(96, 165, 250, 0.12);
+}
+
+.priority-high {
+    color: #fb923c;
+    background: rgba(251, 146, 60, 0.12);
+}
+
+.priority-critical {
+    color: #fb7185;
+    background: rgba(251, 113, 133, 0.12);
+}
+
+/* Description Card */
+
+.ticket-description-card {
+    background: #151d30;
+    border: 1px solid #27334a;
+    border-radius: 13px;
+    padding: 25px;
+    margin-bottom: 24px;
+}
+
+.ticket-description-card h3 {
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 650;
+    margin-bottom: 18px;
+}
+
+.ticket-description {
+    color: #b3bfd2;
+    font-size: 14px;
+    line-height: 1.9;
+    overflow-wrap: anywhere;
+}
+
+/* Section Heading */
+
+.ticket-section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.ticket-section-heading h3 {
+    color: #ffffff;
+    font-size: 17px;
+}
+
+/* Ticket Timeline */
+
+.ticket-timeline-card {
+    background: #151d30;
+    border: 1px solid #27334a;
+    border-radius: 13px;
+    padding: 25px;
+    margin-bottom: 24px;
+}
+
+.ticket-timeline {
+    position: relative;
+    padding-left: 12px;
+}
+
+.timeline-item {
+    position: relative;
+    display: flex;
+    gap: 16px;
+    padding-bottom: 28px;
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-marker {
+    width: 13px;
+    height: 13px;
+    min-width: 13px;
+    margin-top: 4px;
+    border-radius: 50%;
+    background: #56647d;
+    border: 3px solid #27334a;
+    z-index: 1;
+}
+
+.timeline-item.completed .timeline-marker {
+    background: #34d399;
+    border-color: rgba(52, 211, 153, 0.25);
+}
+
+.timeline-item.active .timeline-marker {
+    background: #a78bfa;
+    border-color: rgba(167, 139, 250, 0.25);
+    box-shadow: 0 0 12px rgba(167, 139, 250, 0.4);
+}
+
+.timeline-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 16px;
+    width: 2px;
+    height: calc(100% - 16px);
+    background: #354159;
+}
+
+.timeline-item.completed:not(:last-child)::after {
+    background: #34d399;
+}
+
+.timeline-content h4 {
+    color: #e8edf7;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.timeline-content p {
+    color: #8795ad;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* Assigned Agent */
+
+.ticket-agent-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #151d30;
+    border: 1px solid #27334a;
+    border-radius: 13px;
+    padding: 22px;
+    margin-bottom: 24px;
+}
+
+.agent-avatar {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #7654d9, #328edb);
+    color: #ffffff;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.agent-details h4 {
+    color: #ffffff;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.agent-details p {
+    color: #8795ad;
+    font-size: 12px;
+}
+
+/* Back Button */
+
+.ticket-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: #202b40;
+    border: 1px solid #354159;
+    border-radius: 8px;
+    color: #dce5f5;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.25s ease;
+}
+
+.ticket-back-btn:hover {
+    background: #7654d9;
+    border-color: #7654d9;
+    color: #ffffff;
+}
+
+/* Responsive - Tablet */
+
+@media (max-width: 1000px) {
+    .ticket-details-info {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Responsive - Mobile */
+
+@media (max-width: 600px) {
+    .ticket-details-page {
+        padding: 20px 0 35px;
+    }
+
+    .ticket-details-heading {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .ticket-details-heading h2 {
+        font-size: 22px;
+    }
+
+    .ticket-details-info {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .ticket-info-card {
+        padding: 17px;
+    }
+
+    .ticket-description-card,
+    .ticket-timeline-card {
+        padding: 18px;
+    }
+
+    .ticket-agent-card {
+        padding: 16px;
+    }
+}

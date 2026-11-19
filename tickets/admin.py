@@ -8,6 +8,7 @@ class TicketAdmin(admin.ModelAdmin):
 
     list_display = (
         "id",
+        "uuid",
         "title",
         "category",
         "priority",
@@ -25,6 +26,8 @@ class TicketAdmin(admin.ModelAdmin):
     )
 
     search_fields = (
+        "id",
+        "uuid",
         "title",
         "description",
         "created_by__username",
@@ -33,6 +36,7 @@ class TicketAdmin(admin.ModelAdmin):
 
     readonly_fields = (
         "id",
+        "uuid",
         "created_at",
         "updated_at",
     )

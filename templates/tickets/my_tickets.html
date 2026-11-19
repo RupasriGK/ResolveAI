@@ -38,13 +38,13 @@
                 <span>Dashboard</span>
             </a>
 
-            <a href="{% url 'tickets:create_ticket' %}"
-               class="nav-link">
+            <a href="{% url 'dashboard:create_ticket' request.user.id %}"
+                class="nav-link">
                 <span class="nav-icon">＋</span>
                 <span>Create Ticket</span>
             </a>
 
-            <a href="{% url 'tickets:my_tickets' %}"
+            <a href="{% url 'dashboard:my_tickets' request.user.id %}"
                class="nav-link active">
                 <span class="nav-icon">▤</span>
                 <span>My Tickets</span>
@@ -124,7 +124,7 @@
                 <p>Monitor the progress of your submitted IT issues.</p>
             </div>
 
-            <a href="{% url 'tickets:create_ticket' %}"
+            <a href="{% url 'dashboard:create_ticket' request.user.id %}"
                class="create-ticket-btn">
                 <span>＋</span>
                 Create New Ticket
@@ -172,7 +172,7 @@
                     Apply
                 </button>
 
-                <a href="{% url 'tickets:my_tickets' %}"
+                <a href="{% url 'dashboard:my_tickets' request.user.id %}"
                    class="reset-filter-btn">
                     Reset
                 </a>
@@ -219,12 +219,18 @@
                         <tr>
 
                             <td class="ticket-id">
-                                #{{ ticket.id|truncatechars:13 }}
+                                <a href="{% url 'dashboard:ticket_detail' request.user.id ticket.uuid %}">
+                                    #{{ ticket.uuid|truncatechars:13 }}
+                                </a>
                             </td>
 
                             <td>
                                 <div class="ticket-title-cell">
-                                    <strong>{{ ticket.title }}</strong>
+                                    <strong>
+                                        <a href="{% url 'dashboard:ticket_detail' request.user.id ticket.uuid %}">
+                                            {{ ticket.title }}
+                                        </a>
+                                    </strong>
                                     <span>Support request</span>
                                 </div>
                             </td>
@@ -265,7 +271,7 @@
                                         your search or filter.
                                     </p>
 
-                                    <a href="{% url 'tickets:create_ticket' %}"
+                                    <a href="{% url 'dashboard:create_ticket' request.user.id %}"
                                        class="create-ticket-btn">
                                         ＋ Create Your First Ticket
                                     </a>

@@ -1,0 +1,217 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ITResolve AI | Knowledge Categories</title>
+
+    <link rel="stylesheet" href="{% static 'css/employee-dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/knowledge.css' %}">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-icon">IT</div>
+            <div class="logo-text">
+                <h2>ITResolve</h2>
+                <span>AI SUPPORT</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-navigation">
+
+            <p class="menu-heading">SUPPORT WORKSPACE</p>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{% url 'knowledge:category_list' %}" class="nav-link active">
+                <span class="nav-icon">▣</span>
+                <span>Categories</span>
+            </a>
+
+            <a href="{% url 'knowledge:article_list' %}" class="nav-link">
+                <span class="nav-icon">▤</span>
+                <span>Knowledge Articles</span>
+            </a>
+
+            <a href="{% url 'knowledge:document_list' %}" class="nav-link">
+                <span class="nav-icon">▧</span>
+                <span>Documents</span>
+            </a>
+
+            <p class="menu-heading support-heading">ACCOUNT</p>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">◉</span>
+                <span>My Profile</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="{% url 'logout' %}" class="logout-link">
+                <span class="nav-icon">↪</span>
+                <span>Logout</span>
+            </a>
+        </div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <header class="dashboard-header">
+
+            <div class="header-title">
+                <h1>Knowledge Categories</h1>
+                <p>Organize and manage your IT knowledge resources.</p>
+            </div>
+
+            <div class="header-actions">
+                <div class="header-profile">
+                    <div class="profile-avatar">
+                        {{ request.user.username|first|upper }}
+                    </div>
+
+                    <div class="profile-details">
+                        <h4>{{ request.user.username }}</h4>
+                        <span>{{ request.user.get_role_display }}</span>
+                    </div>
+                </div>
+            </div>
+
+        </header>
+
+        <section class="knowledge-content">
+
+            <!-- Page Heading -->
+            <div class="knowledge-heading">
+
+                <div>
+                    <span class="welcome-label">KNOWLEDGE MANAGEMENT</span>
+                    <h2>Manage Categories</h2>
+                    <p>
+                        Organize troubleshooting guides and IT documentation
+                        into meaningful categories.
+                    </p>
+                </div>
+
+                <a href="{% url 'knowledge:create_category' %}"
+                   class="create-ticket-btn">
+                    <span>＋</span>
+                    Add Category
+                </a>
+
+            </div>
+
+            <!-- Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="knowledge-message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Category Table -->
+            <div class="knowledge-table-card">
+
+                <div class="knowledge-table-header">
+                    <div>
+                        <h3>All Categories</h3>
+                        <p>Manage your knowledge classification.</p>
+                    </div>
+
+                    <span class="knowledge-count">
+                        {{ categories.count }} Categories
+                    </span>
+                </div>
+
+                <div class="knowledge-table-wrapper">
+
+                    <table class="knowledge-table">
+
+                        <thead>
+                            <tr>
+                                <th>Category Name</th>
+                                <th>Description</th>
+                                <th>Created Date</th>
+                                <th>Articles</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for category in categories %}
+
+                                <tr>
+                                    <td>
+                                        <div class="category-name">
+                                            <span class="category-icon">▣</span>
+                                            <strong>{{ category.name }}</strong>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        {{ category.description|default:"No description"|truncatechars:65 }}
+                                    </td>
+
+                                    <td>
+                                        {{ category.created_at|date:"d M Y" }}
+                                    </td>
+
+                                    <td>
+                                        <span class="knowledge-count">
+                                            {{ category.articles.count }}
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            {% empty %}
+
+                                <tr>
+                                    <td colspan="4" class="knowledge-empty">
+                                        <div class="empty-icon">▤</div>
+                                        <h3>No categories created yet</h3>
+                                        <p>
+                                            Create your first category to organize
+                                            IT troubleshooting knowledge.
+                                        </p>
+                                        <a href="{% url 'knowledge:create_category' %}"
+                                           class="create-ticket-btn">
+                                            ＋ Create First Category
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

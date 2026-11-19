@@ -1,9 +1,18 @@
 
+import uuid
+
 from django.conf import settings
 from django.db import models
 
 
 class Ticket(models.Model):
+
+    # Public ticket reference
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        unique=True,
+        editable=False
+    )
 
     class Status(models.TextChoices):
         OPEN = "OPEN", "Open"

@@ -40,12 +40,12 @@
                     <span>Dashboard</span>
                 </a>
 
-                <a href="{% url 'tickets:create_ticket' %}" class="nav-link">
+                <a href="{% url 'dashboard:create_ticket' request.user.id %}" class="nav-link">
                     <span class="nav-icon">＋</span>
                     <span>Create Ticket</span>
                 </a>
 
-                <a href="{% url 'tickets:my_tickets' %}" class="nav-link">
+                <a href="{% url 'dashboard:my_tickets' request.user.id %}" class="nav-link">
                     <span class="nav-icon">▤</span>
                     <span>My Tickets</span>
                 </a>
@@ -166,7 +166,7 @@
                     </p>
                 </div>
 
-                <a href="#" class="create-ticket-btn">
+                <a href="{% url 'dashboard:create_ticket' request.user.id %}" class="create-ticket-btn">
                     <span>＋</span>
                     Create New Ticket
                 </a>

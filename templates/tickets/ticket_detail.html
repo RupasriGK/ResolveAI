@@ -1,0 +1,212 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ticket Details | ITResolve AI</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/employee-dashboard.css' %}">
+
+    <link rel="stylesheet"
+      href="{% static 'css/ticket-detail.css' %}">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-icon">IT</div>
+
+            <div class="logo-text">
+                <h2>ITResolve</h2>
+                <span>AI SUPPORT</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-navigation">
+
+            <p class="menu-heading">MAIN MENU</p>
+
+            <a href="{% url 'dashboard:employee_dashboard' request.user.id %}"
+               class="nav-link">
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{% url 'dashboard:create_ticket' request.user.id %}"
+               class="nav-link">
+                <span class="nav-icon">＋</span>
+                <span>Create Ticket</span>
+            </a>
+
+            <a href="{% url 'dashboard:my_tickets' request.user.id %}"
+               class="nav-link active">
+                <span class="nav-icon">▤</span>
+                <span>My Tickets</span>
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">✧</span>
+                <span>AI Assistant</span>
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">▣</span>
+                <span>Knowledge Base</span>
+            </a>
+
+            <p class="menu-heading support-heading">ACCOUNT</p>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">◉</span>
+                <span>My Profile</span>
+            </a>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">⚙</span>
+                <span>Settings</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Header -->
+        <header class="dashboard-header">
+
+            <div class="header-title">
+                <h1>Ticket Details</h1>
+                <p>View your IT support request information.</p>
+            </div>
+
+            <div class="header-actions">
+
+                <div class="header-profile">
+
+                    <div class="profile-avatar">
+                        {{ request.user.username|first|upper }}
+                    </div>
+
+                    <div class="profile-details">
+                        <h4>{{ request.user.username }}</h4>
+                        <span>Employee</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Ticket Details -->
+        <section class="ticket-details-page">
+
+            <div class="ticket-details-heading">
+
+                <div>
+                    <span class="welcome-label">SUPPORT REQUEST</span>
+
+                    <h2>{{ ticket.title }}</h2>
+
+                    <div class="ticket-reference">
+                        Ticket Reference: {{ ticket.uuid }}
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Status and Priority -->
+            <div class="ticket-details-info">
+
+                <div class="ticket-info-card">
+                    <label>Current Status</label>
+
+                    <span class="status-badge status-{{ ticket.status|lower }}">
+                        {{ ticket.get_status_display }}
+                    </span>
+                </div>
+
+                <div class="ticket-info-card">
+                    <label>Priority</label>
+
+                    <span class="priority-badge priority-{{ ticket.priority|lower }}">
+                        {{ ticket.get_priority_display }}
+                    </span>
+                </div>
+
+                <div class="ticket-info-card">
+                    <label>Category</label>
+                    <p>{{ ticket.category }}</p>
+                </div>
+
+                <div class="ticket-info-card">
+                    <label>Assigned To</label>
+
+                    <p>
+                        {% if ticket.assigned_to %}
+                            {{ ticket.assigned_to.username }}
+                        {% else %}
+                            Not assigned yet
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="ticket-info-card">
+                    <label>Created Date</label>
+                    <p>{{ ticket.created_at|date:"d M Y, h:i A" }}</p>
+                </div>
+
+                <div class="ticket-info-card">
+                    <label>Last Updated</label>
+                    <p>{{ ticket.updated_at|date:"d M Y, h:i A" }}</p>
+                </div>
+
+            </div>
+
+
+            <!-- Description -->
+            
+            <div class="ticket-description-card">
+
+                <h3>Issue Description</h3>
+
+                <div class="ticket-description">
+                    {{ ticket.description|linebreaksbr }}
+                </div>
+
+            </div>
+
+
+            <!-- Back Button -->
+            <div class="form-actions">
+
+                <a href="{% url 'dashboard:my_tickets' request.user.id %}"
+                   class="ticket-back-btn">
+                    ← Back to My Tickets
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
