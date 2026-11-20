@@ -62,10 +62,14 @@
         </nav>
 
         <div class="sidebar-bottom">
-            <a href="{% url 'logout' %}" class="logout-link">
-                <span class="nav-icon">↪</span>
-                <span>Logout</span>
-            </a>
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+
+                <button type="submit" class="logout-link">
+                    <span class="nav-icon">↪</span>
+                    <span>Logout</span>
+                </button>
+            </form>
         </div>
 
     </aside>

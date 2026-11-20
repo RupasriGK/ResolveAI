@@ -18,6 +18,15 @@ from .forms import (
     KnowledgeDocumentForm,
 )
 
+from knowledge.services.retriever import retrieve_relevant_chunks
+from knowledge.services.answer_generator import generate_answer
+
+from django.db import transaction
+from support.models import Conversation, Message, ConversationFeedback
+
+from knowledge.services.document_processor import process_knowledge_document
+
+from django.views.decorators.http import require_POST
 
 # Only IT agents and administrators can manage the Knowledge Base.
 def knowledge_manager_required(view_func):
@@ -173,14 +182,227 @@ def upload_document(request):
             document.uploaded_by = request.user
             document.save()
 
-            messages.success(
-                request,
-                "Knowledge document uploaded successfully."
-            )
+            try:
+                # Process the uploaded document using the RAG pipeline.
+                result = process_knowledge_document(document.id)
+
+                messages.success(
+                    request,
+                    f"Document processed successfully! "
+                    f"{result['total_chunks']} chunks stored in the AI Knowledge Base."
+                )
+
+            except Exception:
+                messages.error(
+                    request,
+                    "Document uploaded, but processing failed. "
+                    "Please check the processing error."
+                )
+
             return redirect("knowledge:document_list")
+
     else:
         form = KnowledgeDocumentForm()
 
     return render(request, "knowledge/upload_document.html", {
         "form": form,
     })
+
+@login_required
+def ai_assistant(request):
+    """
+    AI Assistant with persistent, context-aware conversations.
+    """
+
+    if request.user.role not in ["EMPLOYEE", "IT_AGENT", "ADMIN"]:
+        return HttpResponseForbidden(
+            "You do not have permission to access the AI Assistant."
+        )
+
+    if request.method == "POST":
+
+        question = request.POST.get("question", "").strip()
+        conversation_id = request.POST.get("conversation_id", "").strip()
+
+        if not question:
+            messages.error(request, "Please enter your IT-related question.")
+            return redirect("knowledge:ai_assistant")
+
+        conversation = None
+
+        # Retrieve an existing conversation belonging to this user.
+        if conversation_id:
+            conversation = get_object_or_404(
+                Conversation,
+                id=conversation_id,
+                employee=request.user,
+                status=Conversation.Status.ACTIVE
+            )
+
+        try:
+            # Retrieve previous conversation messages BEFORE saving
+            # the current question.
+            conversation_history = []
+
+            if conversation:
+                conversation_history = list(
+                    conversation.messages
+                    .order_by("-created_at")
+                    .values("role", "content")[:10]
+                )
+
+                # Restore chronological order.
+                conversation_history.reverse()
+
+            # Retrieve relevant Knowledge Base chunks.
+            retrieved_chunks = retrieve_relevant_chunks(
+                question=question,
+                top_k=5,
+                conversation_history=conversation_history
+            )
+
+            # Generate an answer using previous conversation context.
+            answer = generate_answer(
+                question=question,
+                retrieved_chunks=retrieved_chunks,
+                conversation_history=conversation_history
+            )
+
+            # Save conversation and messages.
+            with transaction.atomic():
+
+                if conversation is None:
+                    conversation = Conversation.objects.create(
+                        employee=request.user,
+                        title=question[:200]
+                    )
+
+                Message.objects.create(
+                    conversation=conversation,
+                    role=Message.Role.EMPLOYEE,
+                    content=question
+                )
+
+                Message.objects.create(
+                    conversation=conversation,
+                    role=Message.Role.AI,
+                    content=answer
+                )
+
+                conversation.save(update_fields=["updated_at"])
+
+            # Display complete conversation history.
+            return render(
+                request,
+                "knowledge/ai_assistant.html",
+                {
+                    "question": question,
+                    "answer": answer,
+                    "sources": retrieved_chunks,
+                    "conversation": conversation,
+                    "conversation_id": str(conversation.id),
+                    "chat_messages": conversation.messages.all(),
+                }
+            )
+
+        except Exception:
+            messages.error(
+                request,
+                "Unable to generate a response right now. Please try again."
+            )
+
+    return render(request, "knowledge/ai_assistant.html")
+
+
+
+@login_required
+@require_POST
+def submit_conversation_feedback(request, conversation_id):
+
+    if request.user.role != "EMPLOYEE":
+        return HttpResponseForbidden(
+            "Only employees can submit conversation feedback."
+        )
+
+    conversation = get_object_or_404(
+        Conversation,
+        id=conversation_id,
+        employee=request.user,
+        status=Conversation.Status.ACTIVE
+    )
+
+    feedback_value = request.POST.get("feedback", "").strip()
+
+    valid_feedback = [
+        ConversationFeedback.FeedbackType.HELPFUL,
+        ConversationFeedback.FeedbackType.NOT_HELPFUL,
+    ]
+
+    if feedback_value not in valid_feedback:
+        messages.error(request, "Invalid feedback selection.")
+        return redirect("knowledge:ai_assistant")
+
+    if ConversationFeedback.objects.filter(
+        conversation=conversation
+    ).exists():
+        messages.info(request, "Feedback has already been submitted.")
+    else:
+        try:
+            with transaction.atomic():
+
+                ConversationFeedback.objects.create(
+                    conversation=conversation,
+                    employee=request.user,
+                    feedback=feedback_value,
+                    comments=request.POST.get("comments", "").strip()
+                )
+
+                if feedback_value == ConversationFeedback.FeedbackType.HELPFUL:
+                    conversation.status = Conversation.Status.RESOLVED
+                    conversation.save(
+                        update_fields=["status", "updated_at"]
+                    )
+
+            if feedback_value == ConversationFeedback.FeedbackType.HELPFUL:
+                messages.success(
+                    request,
+                    "Thank you! Your issue has been marked as resolved."
+                )
+            else:
+                messages.success(
+                    request,
+                    "Thank you for your feedback. You can request human support."
+                )
+
+        except Exception:
+            messages.error(
+                request,
+                "Unable to save your feedback. Please try again."
+            )
+
+    # Always return the conversation page.
+    latest_employee_message = conversation.messages.filter(
+        role=Message.Role.EMPLOYEE
+    ).last()
+
+    return render(
+        request,
+        "knowledge/ai_assistant.html",
+        {
+            "question": (
+                latest_employee_message.content
+                if latest_employee_message else ""
+            ),
+            "conversation": conversation,
+            "conversation_id": str(conversation.id),
+            "chat_messages": conversation.messages.all(),
+            "feedback_submitted": ConversationFeedback.objects.filter(
+                conversation=conversation
+            ).exists(),
+            "feedback_value": feedback_value,
+            "show_escalation_prompt": (
+                feedback_value ==
+                ConversationFeedback.FeedbackType.NOT_HELPFUL
+            ),
+        }
+    )

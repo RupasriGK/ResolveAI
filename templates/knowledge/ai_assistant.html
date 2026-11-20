@@ -1,0 +1,756 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Assistant | ITResolve AI</title>
+
+    <link rel="stylesheet" href="{% static 'css/ai-assistant.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Markdown Renderer -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+
+    <!-- HTML Sanitizer -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- Mobile overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="appSidebar">
+
+        <div class="sidebar-header">
+            <div class="brand-icon">
+                <i class="fa-solid fa-headset"></i>
+            </div>
+
+            <div class="brand-info">
+                <h2>ITResolve <span>AI</span></h2>
+                <p>Intelligent IT Support</p>
+            </div>
+
+            <button class="sidebar-close" id="sidebarCloseBtn" type="button">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <a href="{% url 'knowledge:ai_assistant' %}"
+           class="new-chat-btn">
+            <i class="fa-solid fa-plus"></i>
+            <span>New Chat</span>
+        </a>
+
+        <div class="sidebar-section">
+            <p class="section-label">WORKSPACE</p>
+
+            <nav class="sidebar-nav">
+
+                <a href="{% url 'knowledge:ai_assistant' %}"
+                   class="nav-link active">
+                    <i class="fa-solid fa-message"></i>
+                    <span>AI Assistant</span>
+                </a>
+
+                <a href="{% url 'knowledge:category_list' %}"
+                   class="nav-link">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Knowledge Base</span>
+                </a>
+
+                <a href="{% url 'dashboard:my_tickets' user_uuid=request.user.id %}"
+                   class="nav-link">
+                    <i class="fa-solid fa-ticket"></i>
+                    <span>My Tickets</span>
+                </a>
+
+                <a href="{% url 'dashboard:employee_dashboard' user_uuid=request.user.id %}"
+                   class="nav-link">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+
+            </nav>
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-section history-section">
+            <p class="section-label">RECENT CONVERSATIONS</p>
+
+            <div class="empty-history">
+                <i class="fa-regular fa-comments"></i>
+                <p>Your conversations will appear here.</p>
+            </div>
+        </div>
+
+        <div class="sidebar-bottom">
+
+            <div class="support-card">
+                <div class="support-icon">
+                    <i class="fa-solid fa-headset"></i>
+                </div>
+
+                <div>
+                    <h4>Need human support?</h4>
+                    <p>Create a ticket when AI cannot solve your issue.</p>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <div class="profile-avatar">
+                    {{ request.user.username|first|upper }}
+                </div>
+
+                <div class="profile-info">
+                    <h4>{{ request.user.username }}</h4>
+                    <p>Employee Account</p>
+                </div>
+
+                <i class="fa-solid fa-ellipsis"></i>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- Main content -->
+    <main class="main-content">
+
+        <!-- Top header -->
+        <header class="top-header">
+
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" type="button">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <div>
+                    <h2>AI Assistant</h2>
+                    <p>Your intelligent IT support companion</p>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="ai-status">
+                    <span class="status-dot"></span>
+                    AI System Online
+                </div>
+
+                <div class="header-avatar">
+                    {{ request.user.username|first|upper }}
+                </div>
+            </div>
+
+        </header>
+
+
+        <!-- Chat workspace -->
+        <section class="chat-workspace">
+
+            <div class="chat-content">
+
+                {% if not question %}
+
+                    <!-- Welcome screen -->
+                    <div class="welcome-section">
+
+                        <div class="welcome-icon">
+                            <div class="welcome-icon-inner">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <span class="welcome-glow"></span>
+                        </div>
+
+                        <div class="welcome-badge">
+                            <span></span>
+                            POWERED BY AI
+                        </div>
+
+                        <h1>
+                            How can I help you
+                            <span>today?</span>
+                        </h1>
+
+                        <p class="welcome-description">
+                            Describe your technical issue. I'll search our
+                            Knowledge Base and guide you through the solution.
+                        </p>
+
+                        <div class="suggestion-grid">
+
+                            <button type="button"
+                                    class="suggestion-card"
+                                    data-question="I cannot connect to Wi-Fi. How can I troubleshoot it?">
+
+                                <div class="suggestion-icon purple">
+                                    <i class="fa-solid fa-wifi"></i>
+                                </div>
+
+                                <div>
+                                    <h3>Network Issues</h3>
+                                    <p>Wi-Fi, internet and connectivity problems</p>
+                                </div>
+
+                                <i class="fa-solid fa-arrow-up-right-from-square suggestion-arrow"></i>
+                            </button>
+
+
+                            <button type="button"
+                                    class="suggestion-card"
+                                    data-question="I am having trouble with my software. How can I fix it?">
+
+                                <div class="suggestion-icon cyan">
+                                    <i class="fa-solid fa-laptop-code"></i>
+                                </div>
+
+                                <div>
+                                    <h3>Software Problems</h3>
+                                    <p>Application errors and installation issues</p>
+                                </div>
+
+                                <i class="fa-solid fa-arrow-up-right-from-square suggestion-arrow"></i>
+                            </button>
+
+
+                            <button type="button"
+                                    class="suggestion-card"
+                                    data-question="My computer is running very slowly. What should I check?">
+
+                                <div class="suggestion-icon orange">
+                                    <i class="fa-solid fa-computer"></i>
+                                </div>
+
+                                <div>
+                                    <h3>Hardware Issues</h3>
+                                    <p>Computer, keyboard and device problems</p>
+                                </div>
+
+                                <i class="fa-solid fa-arrow-up-right-from-square suggestion-arrow"></i>
+                            </button>
+
+
+                            <button type="button"
+                                    class="suggestion-card"
+                                    data-question="I need help with my account or password.">
+
+                                <div class="suggestion-icon green">
+                                    <i class="fa-solid fa-user-lock"></i>
+                                </div>
+
+                                <div>
+                                    <h3>Account &amp; Access</h3>
+                                    <p>Password, login and permission issues</p>
+                                </div>
+
+                                <i class="fa-solid fa-arrow-up-right-from-square suggestion-arrow"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                {% else %}
+
+                    <!-- Conversation result -->
+                    <div class="conversation-container">
+
+                        <div class="conversation-heading">
+                            <span class="conversation-label">
+                                <i class="fa-solid fa-message"></i>
+                                CURRENT CONVERSATION
+                            </span>
+
+                            <span class="conversation-time">
+                                <i class="fa-regular fa-clock"></i>
+                                Conversation history
+                            </span>
+                        </div>
+
+
+                        <!-- Complete conversation history -->
+                        {% for chat_message in chat_messages %}
+
+                            {% if chat_message.role == "EMPLOYEE" %}
+
+                                <!-- Employee message -->
+                                <div class="message-row user-message">
+
+                                    <div class="message-avatar user-message-avatar">
+                                        {{ request.user.username|first|upper }}
+                                    </div>
+
+                                    <div class="message-body">
+
+                                        <div class="message-meta">
+                                            <strong>You</strong>
+                                            <span>Employee</span>
+                                        </div>
+
+                                        <div class="message-bubble user-bubble">
+                                            {{ chat_message.content|linebreaksbr }}
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            {% elif chat_message.role == "AI" %}
+
+                                <!-- AI response -->
+                                <div class="message-row assistant-message">
+
+                                    <div class="message-avatar ai-message-avatar">
+                                        <i class="fa-solid fa-robot"></i>
+                                    </div>
+
+                                    <div class="message-body">
+
+                                        <div class="message-meta">
+                                            <strong>ITResolve AI</strong>
+                                            <span class="ai-tag">AI ASSISTANT</span>
+                                        </div>
+
+                                        <div class="message-bubble ai-bubble">
+
+                                            <div class="answer-heading">
+                                                <i class="fa-solid fa-sparkles"></i>
+                                                Here's what I found
+                                            </div>
+
+                                            <!-- Markdown-formatted AI response -->
+                                            <div class="answer-content markdown-content">{{ chat_message.content }}</div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+
+                        <!-- Knowledge Base sources for the latest answer -->
+                        {% if sources %}
+
+                            <div class="sources-section">
+
+                                <div class="sources-heading">
+                                    <i class="fa-solid fa-book-bookmark"></i>
+                                    Knowledge Base Sources
+                                    <span>{{ sources|length }}</span>
+                                </div>
+
+                                <div class="source-list">
+
+                                    {% for source in sources %}
+
+                                        <div class="source-item">
+
+                                            <div class="source-icon">
+                                                <i class="fa-solid fa-file-lines"></i>
+                                            </div>
+
+                                            <div class="source-details">
+                                                <h4>{{ source.metadata.document_title }}</h4>
+
+                                                <p>
+                                                    Chunk {{ source.metadata.chunk_index|add:1 }}
+                                                </p>
+                                            </div>
+
+                                            <i class="fa-solid fa-circle-check source-check"></i>
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- Resolution feedback placeholder -->
+                        <div class="resolution-card">
+
+                            {% if feedback_submitted %}
+
+                                {% if feedback_value == "HELPFUL" %}
+
+                                    <div class="resolution-icon">
+                                        <i class="fa-solid fa-circle-check"></i>
+                                    </div>
+
+                                    <div class="resolution-content">
+                                        <h3>Issue marked as resolved!</h3>
+                                        <p>Thank you for confirming that the AI solution helped you.</p>
+                                    </div>
+
+                                {% elif feedback_value == "NOT_HELPFUL" %}
+
+                                    <div class="resolution-icon">
+                                        <i class="fa-solid fa-headset"></i>
+                                    </div>
+
+                                    <div class="resolution-content">
+                                        <h3>Thank you for your feedback.</h3>
+                                        <p>We're sorry the suggested solution didn't resolve your issue.</p>
+                                        <p>You can request assistance from a human IT support agent.</p>
+                                    </div>
+
+                                {% endif %}
+
+                            {% else %}
+
+                                <div class="resolution-icon">
+                                    <i class="fa-solid fa-circle-question"></i>
+                                </div>
+
+                                <div class="resolution-content">
+                                    <h3>Did this solution help you?</h3>
+                                    <p>Your feedback helps us improve IT support.</p>
+                                </div>
+
+                                <div class="resolution-actions">
+
+                                    <form method="POST"
+                                        action="{% url 'knowledge:submit_conversation_feedback' conversation_id=conversation.id %}">
+
+                                        {% csrf_token %}
+
+                                        <input type="hidden" name="feedback" value="HELPFUL">
+
+                                        <button type="submit" class="feedback-btn helpful">
+                                            <i class="fa-solid fa-thumbs-up"></i>
+                                            Yes
+                                        </button>
+
+                                    </form>
+
+                                    <form method="POST"
+                                        action="{% url 'knowledge:submit_conversation_feedback' conversation_id=conversation.id %}">
+
+                                        {% csrf_token %}
+
+                                        <input type="hidden" name="feedback" value="NOT_HELPFUL">
+
+                                        <button type="submit" class="feedback-btn not-helpful">
+                                            <i class="fa-solid fa-thumbs-down"></i>
+                                            No
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Chat input area -->
+            <div class="chat-input-area">
+
+                {% if messages %}
+                    <div class="django-messages">
+
+                        {% for message in messages %}
+                            <div class="message-alert {{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                {% endif %}
+
+
+                <form method="POST"
+                      action="{% url 'knowledge:ai_assistant' %}"
+                      class="chat-form"
+                      id="chatForm">
+
+                    {% csrf_token %}
+
+                    <!-- Preserve the current conversation -->
+                    {% if conversation_id %}
+                        <input
+                            type="hidden"
+                            name="conversation_id"
+                            value="{{ conversation_id }}"
+                        >
+                    {% endif %}
+
+                    <div class="input-container">
+
+                        <textarea
+                            name="question"
+                            id="questionInput"
+                            placeholder="Describe your IT issue..."
+                            rows="1"
+                            maxlength="3000"
+                            required></textarea>
+
+                        <div class="input-bottom">
+
+                            <div class="input-hints">
+
+                                <span>
+                                    <i class="fa-solid fa-book-open"></i>
+                                    Knowledge Base enabled
+                                </span>
+
+                                <span class="input-shortcut">
+                                    Enter to send
+                                </span>
+
+                            </div>
+
+                            <button type="submit"
+                                    class="send-btn"
+                                    id="sendBtn"
+                                    aria-label="Send message">
+
+                                <i class="fa-solid fa-arrow-up"></i>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+                <p class="input-disclaimer">
+                    ITResolve AI can make mistakes. Verify important technical changes
+                    before applying them.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    // ==========================================
+    // MARKDOWN RESPONSE RENDERING
+    // ==========================================
+
+    document.querySelectorAll(".markdown-content").forEach(element => {
+
+        const markdownText = element.textContent;
+
+        if (typeof marked !== "undefined" &&
+            typeof DOMPurify !== "undefined") {
+
+            const renderedHTML = marked.parse(markdownText, {
+                gfm: true,
+                breaks: true
+            });
+
+            element.innerHTML = DOMPurify.sanitize(renderedHTML);
+
+        } else {
+
+            console.error("Markdown libraries could not be loaded.");
+
+        }
+
+    });
+
+
+    // ==========================================
+    // SIDEBAR CONTROLS
+    // ==========================================
+
+    const sidebar = document.getElementById("appSidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+    const menuBtn = document.getElementById("mobileMenuBtn");
+    const closeBtn = document.getElementById("sidebarCloseBtn");
+
+    function openSidebar() {
+
+        sidebar.classList.add("sidebar-open");
+        overlay.classList.add("overlay-visible");
+        document.body.classList.add("sidebar-active");
+
+    }
+
+    function closeSidebar() {
+
+        sidebar.classList.remove("sidebar-open");
+        overlay.classList.remove("overlay-visible");
+        document.body.classList.remove("sidebar-active");
+
+    }
+
+    if (menuBtn) {
+        menuBtn.addEventListener("click", openSidebar);
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener("click", closeSidebar);
+    }
+
+    if (overlay) {
+        overlay.addEventListener("click", closeSidebar);
+    }
+
+
+    // ==========================================
+    // SUGGESTION CARDS
+    // ==========================================
+
+    const questionInput = document.getElementById("questionInput");
+
+    document.querySelectorAll(".suggestion-card").forEach(card => {
+
+        card.addEventListener("click", () => {
+
+            if (!questionInput) return;
+
+            questionInput.value = card.dataset.question;
+            questionInput.focus();
+
+            questionInput.style.height = "auto";
+            questionInput.style.height =
+                questionInput.scrollHeight + "px";
+
+        });
+
+    });
+
+
+    // ==========================================
+    // AUTO RESIZE TEXTAREA
+    // ==========================================
+
+    if (questionInput) {
+
+        questionInput.addEventListener("input", function () {
+
+            this.style.height = "auto";
+
+            this.style.height =
+                Math.min(this.scrollHeight, 150) + "px";
+
+        });
+
+
+        // Enter to send, Shift + Enter for new line
+        questionInput.addEventListener("keydown", function (event) {
+
+            if (event.key === "Enter" && !event.shiftKey) {
+
+                event.preventDefault();
+
+                if (this.value.trim()) {
+                    document.getElementById("chatForm").requestSubmit();
+                }
+
+            }
+
+        });
+
+    }
+
+
+    // ==========================================
+    // LOADING STATE
+    // ==========================================
+
+    const chatForm = document.getElementById("chatForm");
+    const sendBtn = document.getElementById("sendBtn");
+
+    if (chatForm) {
+
+        chatForm.addEventListener("submit", function (event) {
+
+            if (!questionInput || !questionInput.value.trim()) {
+                event.preventDefault();
+                return;
+            }
+
+            sendBtn.disabled = true;
+
+            sendBtn.innerHTML =
+                '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+            sendBtn.classList.add("sending");
+
+        });
+
+    }
+
+
+    // ==========================================
+    // COPY LATEST AI ANSWER
+    // ==========================================
+
+    const copyButton = document.getElementById("copyAnswerBtn");
+
+    if (copyButton) {
+
+        copyButton.addEventListener("click", async function () {
+
+            const answers = document.querySelectorAll(".answer-content");
+
+            const latestAnswer = answers[answers.length - 1];
+
+            if (!latestAnswer) return;
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    latestAnswer.innerText
+                );
+
+                copyButton.innerHTML =
+                    '<i class="fa-solid fa-check"></i> Copied';
+
+                setTimeout(() => {
+
+                    copyButton.innerHTML =
+                        '<i class="fa-regular fa-copy"></i> Copy answer';
+
+                }, 2000);
+
+            } catch (error) {
+
+                copyButton.innerHTML = "Copy unavailable";
+
+            }
+
+        });
+
+    }
+
+</script>
+
+</body>
+</html>

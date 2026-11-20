@@ -1,0 +1,183 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ITResolve AI | Create Category</title>
+
+    <link rel="stylesheet" href="{% static 'css/employee-dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/knowledge.css' %}">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-icon">IT</div>
+            <div class="logo-text">
+                <h2>ITResolve</h2>
+                <span>AI SUPPORT</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-navigation">
+
+            <p class="menu-heading">SUPPORT WORKSPACE</p>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{% url 'knowledge:category_list' %}" class="nav-link active">
+                <span class="nav-icon">▣</span>
+                <span>Categories</span>
+            </a>
+
+            <a href="{% url 'knowledge:article_list' %}" class="nav-link">
+                <span class="nav-icon">▤</span>
+                <span>Knowledge Articles</span>
+            </a>
+
+            <a href="{% url 'knowledge:document_list' %}" class="nav-link">
+                <span class="nav-icon">▧</span>
+                <span>Documents</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="{% url 'logout' %}" class="logout-link">
+                <span class="nav-icon">↪</span>
+                <span>Logout</span>
+            </a>
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="dashboard-header">
+
+            <div class="header-title">
+                <h1>Create Category</h1>
+                <p>Add a new category to organize IT knowledge.</p>
+            </div>
+
+            <div class="header-actions">
+                <div class="header-profile">
+                    <div class="profile-avatar">
+                        {{ request.user.username|first|upper }}
+                    </div>
+
+                    <div class="profile-details">
+                        <h4>{{ request.user.username }}</h4>
+                        <span>{{ request.user.get_role_display }}</span>
+                    </div>
+                </div>
+            </div>
+
+        </header>
+
+        <section class="knowledge-content">
+
+            <div class="knowledge-heading">
+                <div>
+                    <span class="welcome-label">KNOWLEDGE MANAGEMENT</span>
+                    <h2>New Category</h2>
+                    <p>
+                        Create a category to organize troubleshooting
+                        guides and technical documentation.
+                    </p>
+                </div>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="knowledge-message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="knowledge-form-card">
+
+                <div class="knowledge-form-header">
+                    <div class="form-heading-icon">▣</div>
+                    <div>
+                        <h3>Category Information</h3>
+                        <p>Enter the details for your new category.</p>
+                    </div>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="knowledge-form-group">
+                        <label for="{{ form.name.id_for_label }}">
+                            Category Name <span>*</span>
+                        </label>
+
+                        {{ form.name }}
+
+                        {% for error in form.name.errors %}
+                            <small class="field-error">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+
+                    <div class="knowledge-form-group">
+                        <label for="{{ form.description.id_for_label }}">
+                            Description
+                        </label>
+
+                        {{ form.description }}
+
+                        {% for error in form.description.errors %}
+                            <small class="field-error">{{ error }}</small>
+                        {% endfor %}
+
+                        <small class="field-hint">
+                            Briefly explain what type of IT issues belong
+                            to this category.
+                        </small>
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        <div class="knowledge-message error">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="knowledge-form-actions">
+
+                        <a href="{% url 'knowledge:category_list' %}"
+                           class="knowledge-cancel-btn">
+                            Cancel
+                        </a>
+
+                        <button type="submit" class="knowledge-submit-btn">
+                            <span>＋</span>
+                            Create Category
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

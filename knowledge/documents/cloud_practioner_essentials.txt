@@ -1,0 +1,228 @@
+cloud practictioner essentials
+
+1.client - server model
+2.cloud computing - on demand delivery of IT resources over the internet with pay-as-you-go pricing.
+You can deploy cloud resources in multiple ways:
+3 Ways to Deploy an Application 
+    cloud, on-premises, and hybrid.
+
+
+Example question:
+
+You work for a startup company that is developing an application in the cloud. A new security update is available for your operating system (OS), and you are tasked with verifying that the OS is patched accordingly.
+
+Which statement BEST describes which party is responsible for applying security patches to the OS that is running in the cloud?
+
+Correct answer: Your company is responsible for applying security patches to the OS.
+
+Explanation: In AWS, when you use a service like Amazon EC2 (Infrastructure as a Service — IaaS), AWS manages the physical servers, while your company is responsible for maintaining the operating system running on your EC2 instance, including applying security patches.
+
+
+Amazon EC2:
+
+Amazon EC2 is more flexible, cost-effective, and faster than managing on-premises servers. It offers on-demand compute capacity that can be quickly launched, scaled, and terminated, with costs based only on active usage.
+
+It is an AWS service that allows you to rent virtual computers (servers) over the internet.
+Instead of buying a physical server and keeping it in your office, you can create a server on AWS in a few minutes.
+
+Types of EC2 instances:
+
+General Purpose — balanced resources.
+
+Compute Optimized — more CPU processing power.
+
+Memory Optimized — more RAM.
+
+Accelerated Computing — specialized hardware such as GPUs.
+
+Storage Optimized — high-performance local storage.
+
+
+
+AMI stands for Amazon Machine Image.
+
+An AMI is a pre-configured template that AWS uses to launch an EC2 instance. Imagine you want to build a house. Instead of designing everything from the beginning, you use an existing house plan.
+
+An AMI includes several important components.
+Component	        Simple meaning
+Operating system	-The OS to use, such as Linux or Windows
+Storage configuration	-Information about the storage volumes to use when launching
+Architecture	        -The processor architecture, such as x86-64 or ARM64
+Launch permissions	-Who is allowed to use the AMI to launch instances
+Pre-installed software	-Additional software included in the image, if any
+
+
+EC2 pricing models:
+
+1. On-Demand: Pay for the computing resources you use without a long-term commitment.
+2. Savings Plans: Get discounted prices by committing to a certain amount of compute usage for 1 or 3 years.
+3. Reserved Instances: Get discounted pricing for eligible EC2 usage by committing for 1 or 3 years.
+4. Spot Instances: Use spare AWS computing capacity at lower prices, but AWS can interrupt it.
+5. Dedicated Hosts: Rent an entire physical server exclusively for your use.
+
+Elastic Load Balancer:
+
+Load Balancer: Distributes traffic across servers.
+ELB: AWS's managed load-balancing service.
+EC2 Auto Scaling: Adjusts the number of EC2 instances.
+Decoupling: Frontend and backend components can work without directly tracking every individual server.
+
+
+AWS Messaging and Queuing:
+
+A message queue is a place where messages wait until another application is ready to process them.
+the three AWS services:
+
+1.SQS(Simple Queue Service) - Keep messages waiting - Store orders until the kitchen is ready
+2.SNS(simple Notification Service) - Send notifications to subscribers - Send an SMS when an order is ready
+3.Event Bridge - Route events to services based on rules - Route an “order placed” event to the relevant systems
+
+Types of computing(unmanaged, managed, serverless):
+content in word doc
+
+
+AWS lambda:
+
+AWS Lambda is a serverless service that runs your code automatically when a specific event happens(Trigger).
+
+Containers and Orchestration on AWS:
+
+A container is a small, portable package that contains your application code and the things it needs to run, such as libraries, dependencies, and configuration.
+
+Docker is a popular platform used to build, package, and run containers.
+
+AWS provides services that help you store, run, and manage containers without needing to build all the infrastructure yourself.
+1.Amazon ECR — Elastic Container Registry
+  Stores your container images so you can retrieve them when you want to run your application.
+2.Amazon ECS — Elastic Container Service
+  Helps you run, deploy, and manage containers on AWS. AWS manages much of the orchestration for you.
+3.Amazon EKS — Elastic Kubernetes Service
+  Provides a managed Kubernetes environment for deploying and managing containerized applications.
+4.AWS Fargate
+  Lets you run containers without managing the underlying server instances. It works with Amazon ECS and Amazon EKS.
+
+
+
+
+4 Factors to Consider When Choosing an AWS Region :
+1. Compliance – Follow the laws and rules for storing and protecting data.
+
+Example: A company handling EU customers' personal data must follow GDPR requirements.
+
+2. Proximity – Choose a Region close to your users to reduce delay (latency).
+
+Example: If most users are in India, an AWS Region in India may provide faster responses.
+
+3. Feature Availability – Check whether the AWS services you need are available in that Region.
+
+Example: A service available in one Region might not be available in another.
+
+4. Pricing – Compare service prices and taxes across Regions to manage costs.
+
+Example: Running the same application in different Regions may cost different amounts.
+
+
+Compliance → Follow laws.
+
+Proximity → Closer means less delay.
+
+Feature Availability → Check which services are available.
+
+Pricing → Compare costs.
+
+Cloud Formation:
+	AWS CloudFormation is a service that lets you create and manage AWS resources automatically using a template instead of creating each resource manually.
+
+Why is it used?
+Imagine you need to create an EC2 instance, a security group, and an S3 bucket.
+
+Without CloudFormation, you create each resource manually in the AWS Console.
+With CloudFormation, you write a template describing the resources you need, and AWS creates them for you.
+
+
+
+VPC(Virtual Private Cloud):
+
+A VPC is your own logically isolated network inside AWS where you can place resources such as EC2 instances.
+
+Imagine AWS is a large city. You create your own gated community inside that city, and you decide how the network is organized and who can access it.
+
+A subnet is a smaller network inside your VPC. It uses a specific range of IP addresses.
+
+A public subnet is a subnet whose route table has a route to an Internet Gateway for internet-bound traffic.
+An Internet Gateway (IGW) connects a VPC to the internet.
+
+A private subnet is a subnet that does not have a direct route to the internet through an Internet Gateway.
+
+With a virtual private gateway, you can establish a VPN connection between your VPC and a private network, such as an on-premises data center or internal corporate network. A virtual private gateway allows traffic into the VPC only if it is coming from an approved network.
+
+Connecting to the AWS Cloud:
+
+4 Ways to Connect to AWS Cloud,
+Imagine a company has an AWS cloud network and wants to connect employees, offices, and other services to it. AWS provides four main options.
+1. AWS Client VPN
+Meaning: Securely connects an individual employee's computer to the company's AWS network over the internet.
+
+Example: An employee works from home and needs to access company resources in AWS.
+- Benefit: Secure remote access; AWS manages the VPN service.
+- Use case: Employees working from home or travelling.
+Remember: Client VPN = Connect individual users.
+
+2. AWS Site-to-Site VPN
+Meaning: Creates a secure, encrypted connection between a company's office network and its AWS network.
+
+Example: A company office in Madurai needs to connect its local computers and servers to AWS.
+- Benefit: Secure communication between networks.
+- Use case: Connecting branch offices or migrating applications to AWS.
+Remember: Site-to-Site VPN = Connect entire networks.
+
+3. AWS PrivateLink
+
+Meaning: Allows your VPC to privately access a specific service without needing to access that service over the public internet.
+
+Example: Your application in a private subnet needs to access a service hosted by another company in AWS.
+- Benefit: Private access to selected services with less need for network-wide connectivity.
+- Use case: Securely accessing AWS services or services provided by another company.
+Remember: PrivateLink = Private access to specific services.
+
+4. AWS Direct Connect
+Meaning: Provides a dedicated network connection between your company's network and AWS.
+
+Example: A large company transfers huge amounts of data between its own data center and AWS regularly.
+- Benefit: More consistent network performance and potentially lower data-transfer costs in suitable situations.
+- Use case: Large companies that need high bandwidth and predictable connectivity.
+Remember: Direct Connect = Dedicated connection to AWS.
+
+What is a Security Group?
+A Security Group is a virtual firewall for an EC2 instance. It controls which traffic can enter and leave the instance.
+
+Example: Your portfolio website runs on EC2.
+- Allow HTTP (port 80) so visitors can open your website.
+- Allow SSH (port 22) so you can connect to your server.
+- Block other inbound traffic unless you specifically allow it.
+Remember: Security Group = Security guard at your EC2 instance.
+
+What is a Network ACL?
+A Network ACL (Access Control List) is a virtual firewall for a subnet. It checks traffic entering and leaving the subnet.
+
+Example: Your subnet contains multiple EC2 instances. The Network ACL controls which traffic can enter or leave that subnet.
+
+Remember: Network ACL = Security checkpoint at the subnet entrance and exit.
+
+
+AWS Edge Networking Services and Global Networking:
+
+1. Amazon Route 53 — DNS
+Simple meaning: Route 53 helps connect a domain name to the correct website or server.
+
+Example: You type www.example.com into your browser. DNS helps your browser find the IP address for that website.
+
+2. Amazon CloudFront — CDN
+Simple meaning: CloudFront stores copies of website content at locations around the world, closer to users, so it loads faster.
+
+Example: Your portfolio server is in the USA, but a visitor is in India. CloudFront can deliver cached images and files from a nearby location instead of fetching them from the original server every time.
+
+3. AWS Global Accelerator
+Simple meaning: Global Accelerator directs user traffic through the AWS global network to improve application performance and availability.
+
+Example: A gaming company has users in India, Japan, and the USA. Global Accelerator helps route their connections to suitable application endpoints using the AWS network.

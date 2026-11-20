@@ -45,4 +45,18 @@ urlpatterns = [
         views.upload_document,
         name="upload_document"
     ),
+
+
+    # AI Assistant
+    path(
+        "assistant/",
+        views.ai_assistant,
+        name="ai_assistant"
+    ),
+
+    path(
+        "assistant/feedback/<uuid:conversation_id>/",
+        views.submit_conversation_feedback,
+        name="submit_conversation_feedback"
+    ),
 ]

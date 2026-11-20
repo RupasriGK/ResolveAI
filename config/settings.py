@@ -16,6 +16,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+VOYAGE_API_KEY = os.getenv("VOYAGE_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
 
 # Gmail SMTP Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

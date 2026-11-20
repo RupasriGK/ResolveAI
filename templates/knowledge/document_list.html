@@ -1,0 +1,236 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Knowledge Documents | ITResolve AI</title>
+
+    <link rel="stylesheet" href="{% static 'css/employee-dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/knowledge.css' %}">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- Mobile Menu -->
+    <button class="mobile-menu-btn"
+            id="mobileMenuBtn"
+            type="button"
+            aria-label="Open navigation"
+            aria-expanded="false"
+            aria-controls="appSidebar">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="appSidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-icon">IT</div>
+
+            <div class="logo-text">
+                <h2>ITResolve</h2>
+                <span>AI SUPPORT</span>
+            </div>
+        </div>
+
+        <button class="sidebar-close-btn"
+                id="sidebarCloseBtn"
+                type="button"
+                aria-label="Close navigation">
+            &times;
+        </button>
+
+        <nav class="sidebar-navigation">
+
+            <p class="menu-heading">MAIN MENU</p>
+
+            <a href="{% url 'knowledge:category_list' %}" class="nav-link">
+                <span class="nav-icon">▣</span>
+                <span>Categories</span>
+            </a>
+
+            <a href="{% url 'knowledge:article_list' %}" class="nav-link">
+                <span class="nav-icon">▤</span>
+                <span>Knowledge Articles</span>
+            </a>
+
+            <a href="{% url 'knowledge:document_list' %}" class="nav-link active">
+                <span class="nav-icon">▧</span>
+                <span>Documents</span>
+            </a>
+
+            <p class="menu-heading support-heading">ACCOUNT</p>
+
+            <a href="{% url 'logout' %}" class="nav-link">
+                <span class="nav-icon">↪</span>
+                <span>Logout</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <header class="dashboard-header">
+
+            <div class="header-title">
+                <h1>Knowledge Documents</h1>
+                <p>Manage documents used by the ITResolve AI knowledge system.</p>
+            </div>
+
+            <div class="header-actions">
+                <div class="header-profile">
+                    <div class="profile-avatar">
+                        {{ request.user.username|first|upper }}
+                    </div>
+
+                    <div class="profile-details">
+                        <h4>{{ request.user.username }}</h4>
+                        <span>{{ request.user.get_role_display }}</span>
+                    </div>
+                </div>
+            </div>
+
+        </header>
+
+        <section class="document-page">
+
+            <!-- Page Heading -->
+            <div class="document-heading">
+
+                <div>
+                    <h2>Uploaded Documents</h2>
+                    <p>
+                        Upload and manage PDF, DOCX and TXT knowledge documents.
+                    </p>
+                </div>
+
+                <a href="{% url 'knowledge:upload_document' %}"
+                   class="upload-document-btn">
+                    <span>＋</span>
+                    Upload Document
+                </a>
+
+            </div>
+
+            <!-- Document Information -->
+            <div class="document-info-card">
+
+                <div class="document-info-icon">✧</div>
+
+                <div>
+                    <h3>AI Knowledge Processing</h3>
+                    <p>
+                        Uploaded documents will be processed into searchable
+                        knowledge for the AI assistant. Only successfully
+                        processed and approved content should be used for retrieval.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Document Table -->
+            <div class="document-table-container">
+
+                <table class="document-table">
+
+                    <thead>
+                        <tr>
+                            <th>Document</th>
+                            <th>Uploaded By</th>
+                            <th>Processing Status</th>
+                            <th>Uploaded Date</th>
+                            <th>Processed Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for document in documents %}
+
+                        <tr>
+
+                            <td>
+                                <div class="document-name-cell">
+
+                                    <div class="document-file-icon">▤</div>
+
+                                    <div>
+                                        <strong>{{ document.title }}</strong>
+                                        <small>
+                                            {{ document.file.name|default:"File unavailable" }}
+                                        </small>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                {{ document.uploaded_by.username|default:"Unknown" }}
+                            </td>
+
+                            <td>
+                                <span class="document-status status-{{ document.processing_status|lower }}">
+                                    {{ document.get_processing_status_display }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {{ document.uploaded_at|date:"d M Y, h:i A" }}
+                            </td>
+
+                            <td>
+                                {% if document.processed_at %}
+                                    {{ document.processed_at|date:"d M Y, h:i A" }}
+                                {% else %}
+                                    <span class="document-not-processed">Not processed</span>
+                                {% endif %}
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+                            <td colspan="5" class="empty-documents">
+                                <div class="empty-document-icon">▧</div>
+                                <h3>No documents uploaded yet</h3>
+                                <p>Upload your first knowledge document to get started.</p>
+
+                                <a href="{% url 'knowledge:upload_document' %}"
+                                   class="upload-document-btn">
+                                    Upload First Document
+                                </a>
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="{% static 'js/sidebar.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,233 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Articles | ITResolve AI</title>
+
+    <link rel="stylesheet" href="{% static 'css/employee-dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/knowledge.css' %}">
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <button class="mobile-menu-btn"
+            id="mobileMenuBtn"
+            type="button"
+            aria-label="Open navigation"
+            aria-expanded="false"
+            aria-controls="appSidebar">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="sidebar" id="appSidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-icon">IT</div>
+            <div class="logo-text">
+                <h2>ITResolve</h2>
+                <span>AI SUPPORT</span>
+            </div>
+        </div>
+
+        <button class="sidebar-close-btn"
+                id="sidebarCloseBtn"
+                type="button"
+                aria-label="Close navigation">
+            &times;
+        </button>
+
+        <nav class="sidebar-navigation">
+
+            <p class="menu-heading">MAIN MENU</p>
+
+            <a href="#" class="nav-link">
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{% url 'knowledge:category_list' %}" class="nav-link">
+                <span class="nav-icon">▣</span>
+                <span>Categories</span>
+            </a>
+
+            <a href="{% url 'knowledge:article_list' %}" class="nav-link active">
+                <span class="nav-icon">▤</span>
+                <span>Knowledge Articles</span>
+            </a>
+
+            <a href="{% url 'knowledge:document_list' %}" class="nav-link">
+                <span class="nav-icon">▧</span>
+                <span>Documents</span>
+            </a>
+
+            <p class="menu-heading support-heading">ACCOUNT</p>
+
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+
+                <button type="submit" class="nav-link logout-link">
+                    <span class="nav-icon">↪</span>
+                    <span>Logout</span>
+                </button>
+            </form>
+
+        </nav>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="dashboard-header">
+
+            <div class="header-title">
+                <h1>Knowledge Articles</h1>
+                <p>Manage IT troubleshooting knowledge and solutions.</p>
+            </div>
+
+            <div class="header-actions">
+                <div class="header-profile">
+                    <div class="profile-avatar">
+                        {{ request.user.username|first|upper }}
+                    </div>
+                    <div class="profile-details">
+                        <h4>{{ request.user.username }}</h4>
+                        <span>{{ request.user.get_role_display }}</span>
+                    </div>
+                </div>
+            </div>
+
+        </header>
+
+        <section class="knowledge-page">
+
+            <div class="knowledge-heading">
+                <div>
+                    <h2>All Articles</h2>
+                    <p>Search, manage and publish troubleshooting guides.</p>
+                </div>
+
+                <a href="{% url 'knowledge:create_article' %}"
+                   class="create-ticket-btn">
+                    + Create Article
+                </a>
+            </div>
+
+            <form method="GET" class="knowledge-filter-form">
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search_query }}"
+                    placeholder="Search articles by title..."
+                    class="form-control"
+                >
+
+                <select name="status" class="form-control">
+                    <option value="">All Statuses</option>
+
+                    {% for value, label in status_choices %}
+                        <option value="{{ value }}"
+                            {% if selected_status == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit" class="filter-btn">
+                    Search
+                </button>
+
+                <a href="{% url 'knowledge:article_list' %}"
+                   class="reset-filter-btn">
+                    Reset
+                </a>
+
+            </form>
+
+            <div class="knowledge-table-container">
+
+                <table class="knowledge-table">
+
+                    <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Created By</th>
+                            <th>Last Updated</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for article in articles %}
+
+                        <tr>
+                            <td>
+                                <div class="article-title-cell">
+                                    <strong>{{ article.title }}</strong>
+                                    <small>{{ article.summary|default:"No summary available"|truncatechars:70 }}</small>
+                                </div>
+                            </td>
+
+                            <td>{{ article.category.name }}</td>
+
+                            <td>
+                                <span class="article-status status-{{ article.status|lower }}">
+                                    {{ article.get_status_display }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {{ article.created_by.username|default:"Unknown" }}
+                            </td>
+
+                            <td>{{ article.updated_at|date:"d M Y" }}</td>
+
+                            <td>
+                                <a href="{% url 'knowledge:edit_article' article.id %}"
+                                   class="edit-article-btn">
+                                    Edit
+                                </a>
+                            </td>
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+                            <td colspan="6" class="empty-articles">
+                                <div>
+                                    <h3>No knowledge articles found</h3>
+                                    <p>Create your first troubleshooting article.</p>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="{% static 'js/sidebar.js' %}"></script>
+
+</body>
+</html>

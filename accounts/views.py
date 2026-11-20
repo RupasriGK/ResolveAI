@@ -6,6 +6,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 
 from .models import User
 
@@ -70,20 +71,40 @@ def register_view(request):
     return render(request, "accounts/register.html")
 
 
+
 def login_view(request):
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        user = authenticate(request, username=username, password=password)
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "")
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
 
         if user is not None:
+            if not user.is_active:
+                messages.error(request, "Your account is inactive.")
+                return render(request, "accounts/login.html")
+
             login(request, user)
+
             if user.role == User.Role.EMPLOYEE:
-                return redirect("dashboard:employee_dashboard",user_uuid=request.user.id)
-            if user.role == User.Role.IT_AGENT:
-                return redirect("agent_dashboard")
-            if user.role == User.Role.ADMIN:
-                return redirect("admin_dashboard")
+                return redirect(
+                    "dashboard:employee_dashboard",
+                    user_uuid=user.id
+                )
+
+            elif user.role == User.Role.IT_AGENT:
+                return redirect("knowledge:category_list")
+
+            elif user.role == User.Role.ADMIN:
+                return redirect("admin:index")
+
+            logout(request)
+            messages.error(request, "Your account has an invalid role.")
+
         else:
             messages.error(request, "Invalid username or password.")
 
@@ -91,6 +112,7 @@ def login_view(request):
 
 
 @login_required
+@require_POST
 def logout_view(request):
     logout(request)
     messages.success(request, "You have logged out successfully.")
